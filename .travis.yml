@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - '0.12'
+  - iojs
+before_install:
+  - npm install -g coffee-script coffeelint mocha mocha-lcov-reporter istanbul coveralls
+after_success:
+  - mocha --recursive --compilers coffee:coffee-script/register --require coffee-coverage/register-istanbul --reporter mocha-lcov-reporter
+  - istanbul report lcov --dir coverage/
+  - coveralls < coverage/lcov.info
+  - rm -rf coverage/
+env:
+  - NODE_ENV=ci
