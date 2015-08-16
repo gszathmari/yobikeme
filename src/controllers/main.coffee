@@ -19,7 +19,7 @@ exports.yo = (req, res, next) ->
         return next(false)
       # Great success!
       else
-        logger.info "Yo has been sent to #{req.params.username}"
+        logger.info "SUCCESS: Yo has been sent to #{req.params.username}"
         res.status response.statusCode
         res.json JSON.parse body
         return next()
