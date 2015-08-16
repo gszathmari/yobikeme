@@ -61,6 +61,7 @@
   },
   "homepage": "https://github.com/gszathmari/yobikeme#readme",
   "pre-commit": [
-    "validate"
+    "validate",
+    "test"
   ]
 }
