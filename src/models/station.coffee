@@ -44,11 +44,14 @@ class Station
         # Retrieve from CityBikes if data is not cached
         else
           citybikes.stations nearestNetwork.key, (err, results) =>
+            if err
+              logger.error err.message
+              throw err
             # Transform CityBikes format to geolib format
             stations = @processItems results
+            @events.emit "stationsRetrieved", stations
             redis.set nearestNetwork.key, JSON.stringify stations
             redis.expire nearestNetwork.key, 60 * 5
-            @events.emit "stationsRetrieved", stations
 
     # Find nearest cycle hire station
     @events.on "stationsRetrieved", (stations) =>
@@ -65,10 +68,13 @@ class Station
       else
         # Retrieve from CityBikes if data is not cached
         citybikes.networks (err, results) =>
+          if err
+            logger.error err.message
+            throw err
           # Transform CityBikes format to geolib format
           networks = @processItems results
+          @events.emit "networksRetrieved", networks
           redis.set "networks", JSON.stringify networks
           redis.expire "networks", 60 * 30
-          @events.emit "networksRetrieved", networks
 
 module.exports = Station
