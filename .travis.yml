@@ -10,5 +10,4 @@ after_success:
   - coveralls < coverage/lcov.info
   - rm -rf coverage/
 env:
-  - NODE_ENV=ci
-  - YO_API_TOKEN=secret
+  - NODE_ENV=ci YO_API_TOKEN=secret
