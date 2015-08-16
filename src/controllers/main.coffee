@@ -29,7 +29,7 @@ exports.yo = (req, res, next) ->
         if error
           message = "Error while sending Yo to #{req.params.username}"
           logger.warn "#{message}: #{error}"
-          res.send new restify.BadGatewayError message
+          res.send new restify.BadRequestError message
           return next(false)
         else
           logger.info "Yo has been sent to #{req.params.username}"

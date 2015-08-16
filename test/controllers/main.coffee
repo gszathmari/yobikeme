@@ -60,7 +60,7 @@ describe 'Controller: yo', ->
     expect(@res.send.calledOnce).be.true
     expect(@res.send.firstCall.args[0]).be.an('object')
     expect(@res.send.firstCall.args[0]).have.property('statusCode')
-    expect(@res.send.firstCall.args[0].statusCode).equal(502)
+    expect(@res.send.firstCall.args[0].statusCode).equal(400)
     expect(@next.calledOnce).be.true
     expect(@next.calledWith false).be.true
     done()
