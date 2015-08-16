@@ -19,8 +19,8 @@ exports.yo = (req, res, next) ->
       url: "https://api.justyo.co/yo/"
     # Push Yo through the Yo API
     request.post options, (error, response, body) ->
-      if err
-        logger.error error
+      if error
+        logger.warn "Yo API error: #{error}"
         res.end()
       else
         res.status response.statusCode

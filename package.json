@@ -2,7 +2,7 @@
   "name": "yobikeme",
   "version": "1.0.0",
   "description": "Find nearest cycle hire station",
-  "main": "./app/server.coffee",
+  "main": "./app/cluster.js",
   "engines": {
     "node": ">=0.12"
   },
@@ -28,13 +28,16 @@
     "grunt-contrib-coffee": "^0.13.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-develop": "^0.4.0",
+    "grunt-env": "^0.4.4",
+    "grunt-file-exists": "^0.1.2",
+    "grunt-istanbul": "^0.6.1",
     "grunt-mocha-test": "^0.12.7",
     "mocha": "^2.2.5",
     "precommit-hook": "^3.0.0",
     "sinon": "^1.15.4"
   },
   "scripts": {
-    "start": "node ./app/server.coffee",
+    "start": "node ./app/cluster.coffee",
     "test": "grunt test",
     "validate": "npm ls",
     "lint": "jshint ."
