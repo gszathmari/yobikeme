@@ -4,7 +4,7 @@
   "description": "Find nearest cycle hire station",
   "main": "./app/cluster.js",
   "engines": {
-    "node": ">=0.12"
+    "node": ">=0.10"
   },
   "directories": {
     "test": "test"
