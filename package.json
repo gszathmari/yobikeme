@@ -39,6 +39,7 @@
     "precommit-hook": "^3.0.0",
     "sinon": "^1.15.4"
   },
+  "main": "lib/cluster.js",
   "scripts": {
     "start": "node lib/cluster.js",
     "test": "grunt test",
