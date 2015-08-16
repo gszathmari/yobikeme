@@ -9,7 +9,8 @@ exceptionHandler = require './helpers/exceptionhandler'
 logger = require './helpers/logger'
 
 app = module.exports = restify.createServer()
-listenPort = process.env.PORT or 8080
+listenHost = process.env.OPENSHIFT_NODEJS_IP or "0.0.0.0"
+listenPort = process.env.OPENSHIFT_NODEJS_PORT or 8080
 
 #
 # Applying Restify built-in plugins and other helpers
@@ -28,7 +29,7 @@ app.on 'uncaughtException', exceptionHandler
 # Launching server
 #
 
-server = app.listen listenPort, ->
+server = app.listen listenPort, listenHost, ->
   address = server.address().address
   port = server.address().port
   logger.info \
