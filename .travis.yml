@@ -1,19 +1,17 @@
 language: node_js
 node_js:
-- '0.10'
-- '0.12'
-- iojs
+  - '0.10'
+  - '0.12'
+  - iojs
 before_install:
-- npm install -g coffee-script coffeelint mocha mocha-lcov-reporter istanbul coveralls
-  grunt-cli
+  - npm install -g coffee-script coffeelint mocha mocha-lcov-reporter istanbul coveralls grunt-cli
 after_success:
-- mocha --recursive --compilers coffee:coffee-script/register --require coffee-coverage/register-istanbul
-  --reporter mocha-lcov-reporter ./test
-- istanbul report lcov --dir coverage/
-- coveralls < coverage/lcov.info
-- rm -rf coverage/
+  - mocha --recursive --compilers coffee:coffee-script/register --require coffee-coverage/register-istanbul --reporter mocha-lcov-reporter ./test
+  - istanbul report lcov --dir coverage/
+  - coveralls < coverage/lcov.info
+  - rm -rf coverage/
 env:
-- NODE_ENV=ci YO_API_TOKEN=secret
+  - NODE_ENV=ci YO_API_TOKEN=secret
 deploy:
   provider: openshift
   user: gszathmari
