@@ -1,1 +1,1 @@
-web: node app/cluster.js
+web: node lib/cluster.js

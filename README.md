@@ -11,3 +11,4 @@ The following environmental variables should be configured
 - `REDIS_HOST`: (default: 127.0.0.1) Redis server address
 - `REDIS_PORT`: (default: 6379) Redis server port
 - `REDIS_PASSWORD`: Redis credentials
+- `LOGENTRIES_TOKEN`: (optional) Logentries token

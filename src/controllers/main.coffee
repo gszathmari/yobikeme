@@ -20,9 +20,11 @@ exports.yo = (req, res, next) ->
     # Push Yo through the Yo API
     request.post options, (error, response, body) ->
       if error
-        logger.warn "Yo API error: #{error}"
+        logger.warn "Error while sending Yo to #{req.params.username}: #{error}"
+        res.status 500
         res.end()
       else
+        logger.info "Yo has been sent to #{req.params.username}"
         res.status response.statusCode
         res.json JSON.parse body
       return next()

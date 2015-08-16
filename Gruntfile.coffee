@@ -22,7 +22,7 @@ module.exports = (grunt) ->
           bare: true
           cwd: 'src'
           src: '**/*.coffee'
-          dest: 'app/'
+          dest: 'lib/'
           ext: '.js'
         ]
     coffeelint:
@@ -47,8 +47,8 @@ module.exports = (grunt) ->
         dir: 'coverage/reports'
         print: 'detail'
     clean:
-      all: ['coverage/', 'app/']
-      js: ['app/']
+      all: ['coverage/', 'lib/']
+      js: ['lib/']
       reports: ['coverage/']
       coverage: ['coverage/coverage-coffee.json']
     fileExists:
