@@ -42,7 +42,7 @@
   "scripts": {
     "start": "node lib/cluster.js",
     "test": "grunt test",
-    "prepublish": "coffee --bare --compile --output lib/ src/",
+    "postinstall": "coffee --bare --compile --output lib/ src/",
     "validate": "npm ls"
   },
   "repository": {
