@@ -2,7 +2,6 @@
   "name": "yobikeme",
   "version": "1.0.0",
   "description": "Find nearest cycle hire station",
-  "main": "./app/cluster.js",
   "engines": {
     "node": ">=0.10"
   },
@@ -14,7 +13,6 @@
     "citybikes-js": "^0.1.4",
     "coffee-script": "^1.9.3",
     "geolib": "^2.0.18",
-    "hiredis": "^0.4.0",
     "newrelic": "^1.21.2",
     "redis": "^0.12.1",
     "request": "^2.60.0",
@@ -42,10 +40,8 @@
     "sinon": "^1.15.4"
   },
   "scripts": {
-    "start": "node ./app/cluster.coffee",
     "test": "grunt test",
-    "validate": "npm ls",
-    "lint": "jshint ."
+    "validate": "npm ls"
   },
   "repository": {
     "type": "git",
