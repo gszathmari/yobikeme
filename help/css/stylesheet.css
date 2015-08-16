@@ -1,0 +1,21 @@
+body {
+  padding-top: 70px;
+  padding-bottom: 30px;
+  background: #9b59b6;
+}
+.jumbotron {
+  background: #ececec;
+}
+img {
+  padding-bottom: 12px;
+}
+h1 {
+  text-align: center;
+  padding-bottom: 12px;
+}
+p {
+  text-align: center;
+}
+.img-responsive {
+    margin: 0 auto;
+}
