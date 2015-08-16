@@ -41,6 +41,7 @@
   },
   "scripts": {
     "test": "grunt test",
+    "prepublish": "coffee --bare --compile --output lib/ src/",
     "validate": "npm ls"
   },
   "repository": {
