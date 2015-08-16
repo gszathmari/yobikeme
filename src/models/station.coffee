@@ -2,6 +2,7 @@
 geolib = require 'geolib'
 citybikes = require 'citybikes-js'
 redis = require '../helpers/redis'
+logger = require '../helpers/logger'
 
 class Station
   constructor: (@location) ->
@@ -35,8 +36,15 @@ class Station
 
   locate: (callback) ->
     @events.on "networksRetrieved", (networks) =>
-      # Find the nearest cycle hire service
-      nearestNetwork = geolib.findNearest @coordinates, networks
+      try
+        # Find the nearest cycle hire service
+        nearestNetwork = geolib.findNearest @coordinates, networks
+      catch
+        # Throw exception if coordinates from Yo are invalid
+        err = new Error "Error while finding nearest networks with geolib"
+        logger.error err.message
+        callback err, null
+        return false
       # Retrieve list of stations from cache
       redis.get nearestNetwork.key, (err, stations) =>
         if stations
@@ -46,7 +54,8 @@ class Station
           citybikes.stations nearestNetwork.key, (err, results) =>
             if err
               logger.error err.message
-              throw err
+              callback err, null
+              return false
             # Transform CityBikes format to geolib format
             stations = @processItems results
             @events.emit "stationsRetrieved", stations
@@ -55,7 +64,14 @@ class Station
 
     # Find nearest cycle hire station
     @events.on "stationsRetrieved", (stations) =>
-      nearestStation = geolib.findNearest @coordinates, stations
+      try
+        nearestStation = geolib.findNearest @coordinates, stations
+      catch
+        # Throw exception if coordinates from Yo are invalid
+        err = new Error "Error while finding nearest stations with geolib"
+        logger.error err.message
+        callback err, null
+        return false
       # Construct Google Maps URL
       mapsUrl = @constructUrl nearestStation
       # Send result back via callback
@@ -70,7 +86,8 @@ class Station
         citybikes.networks (err, results) =>
           if err
             logger.error err.message
-            throw err
+            callback err, null
+            return false
           # Transform CityBikes format to geolib format
           networks = @processItems results
           @events.emit "networksRetrieved", networks
