@@ -80,6 +80,25 @@ describe 'Controller: yo', ->
     expect(@next.calledOnce).be.true
     done()
 
+  it 'should return Helper URL', (done) ->
+    response =
+      statusCode: 200
+    body =
+      success: true
+    req =
+      params:
+        username: "unittest"
+    helperUrl = "http://bit.ly/yobikeme-help"
+    @stub1.yields null, helperUrl
+    @stub2.callsArgWith 1, null, response, JSON.stringify body
+    r = main.yo req, @res, @next
+    expect(@res.json.calledOnce).be.true
+    expect(@res.json.firstCall.args[0]).have.property('success')
+    expect(@res.status.calledOnce).be.true
+    expect(@res.status.firstCall.args[0]).equal(response.statusCode)
+    expect(@next.calledOnce).be.true
+    done()
+
   afterEach ->
     @res.send.reset()
     @res.status.reset()
