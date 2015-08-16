@@ -11,3 +11,4 @@ after_success:
   - rm -rf coverage/
 env:
   - NODE_ENV=ci
+  - YO_API_TOKEN=secret
