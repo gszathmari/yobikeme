@@ -1,19 +1,23 @@
 language: node_js
 node_js:
-  - '0.10'
-  - '0.12'
-  - 'iojs'
+- '0.10'
+- '0.12'
+- iojs
 before_install:
-  - npm install -g coffee-script coffeelint mocha mocha-lcov-reporter istanbul coveralls grunt-cli
+- npm install -g coffee-script coffeelint mocha mocha-lcov-reporter istanbul coveralls
+  grunt-cli
 after_success:
-  - mocha --recursive --compilers coffee:coffee-script/register --require coffee-coverage/register-istanbul --reporter mocha-lcov-reporter ./test
-  - istanbul report lcov --dir coverage/
-  - coveralls < coverage/lcov.info
-  - rm -rf coverage/
+- mocha --recursive --compilers coffee:coffee-script/register --require coffee-coverage/register-istanbul
+  --reporter mocha-lcov-reporter ./test
+- istanbul report lcov --dir coverage/
+- coveralls < coverage/lcov.info
+- rm -rf coverage/
 env:
-  - NODE_ENV=ci YO_API_TOKEN=secret
+- NODE_ENV=ci YO_API_TOKEN=secret
 deploy:
-  provider: heroku
-  app: yobikeme-prod
-  api_key:
-    secure: "yzgTT7Q46z2VHW/+HIls80N0AR30V/pI3HU9QyiuiPoBZ4JWGZFDRaClmrhCr3G4K1iIw1pVy0+G5YVkhudsX74FCMba+ry4fbtmdh+UpMo4DDC54F+OLJljAizwrd5lpu/UbPxNtk79IBqV6Ct/DVF2LrBbCLTNgKvx5/efJeLhHbbTCZ/s4tFJdA98LcQkKDQRlPVXknuJjvrTWo856T7pv2MaOWp3Dfz2/rnofxxxQ+NKo8WE/qKVxRWnzCcn39xm28os6aN3cAz0uVr4V3Fnoh1ZRKsUfIUJOnzOnsvJXrdsHCv4/4IkWT8VKE++n78HWGYPnqkOmRKDmlBLO4MDPl89ScAr0cSeVQdiFbMDyVRKyzN5jesSx8i11HhdtsZJuLSPgRuyPppduTECercHEPuzzbI/DYmx6buiYEGwnf64VR1Dzul4K2EoggYOwxMMioKGqtUSC+EE+Mx/+gYZIqNazS53AhrrUQFO6+CJLfe+pqNSIvWN+aNINWYsjS1pdwkRIHQqfEAo65dLG9+cFQkf05q/ZlhcUAQgWA2J02raQIDy0caYxRgjb9wufogMXzKeZjlExVwuPyNslVDYtTHlydCzzud/yQ1I4ZYkdQO1akLlWRDZ8b4yQXf7nzhv8tNku0HQ5624H94eqMJgOLOGMCP85uOGxOKjO6s="
+  provider: openshift
+  user: gszathmari
+  password:
+    secure: otc5dG51qkzqxAZPinJlrkMLKLjja+lcHjuqMiG2urfc456x8NGmlEeeOVV+JhcPsiJNMoxiq3WITR8twfiMXHfo5Zu3kK2m2VQIsyEUVpwklC/wFu0OykVZwemcy1+Y9AGipybvw9KnYKVTRI1O1M4j3LyoTqkmPyFWCP0D3SG0jzSjJQ8BomTb/JEtXbfE5j1X9VDv6gOh2dImtMb6cPp3Iyhjlx5dfa+YEbs1VvhwFJAGVqfBXTv+1PbPBt5vU4PoAp84pIY1PtvcFv3dbLihfZY9faNNMtFV8Xvp5ouKBSKgvEhTb1tggzv4fohK+rDAQJUC32ExO1MXggEzeKU5Y/lJMNFSZYZu+GnZk0OsLO2AighYRkbCcEc8sHCa5WZpxkiprA1655hLJXK4wfv5ThCLOfhdxM8rTOzAISUB2fRIhQvo8mSJHLQ0Bwn/cbo0md3GPu9XUCefclaG8g7aqry77JZ8zO9knEL6W2ZSep5LjH93uu+cQEXuEjWII7LWhCRbl2P6JM24Y4xg7mth77fe46gKd6X7Q1xGKkiPW5WdfaxLDcX9rfvg1nQVT0K5IcFlBNJNfYSJcdiUpI1zDC0+yAOoHJY5/jz9wHPt9ag7BQ2Fu/dqp8qvkvLjMYXJDXUkszFr2YRXk3QbDabnjhVOWmivFT8TrC58vts=
+  app: yobikeme
+  domain: gszathmari
