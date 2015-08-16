@@ -1,5 +1,6 @@
 language: node_js
 node_js:
+  - '0.10'
   - '0.12'
   - iojs
 before_install:
@@ -11,3 +12,8 @@ after_success:
   - rm -rf coverage/
 env:
   - NODE_ENV=ci YO_API_TOKEN=secret
+deploy:
+  provider: heroku
+  app: yobikeme-prod
+  api_key:
+    secure: "yzgTT7Q46z2VHW/+HIls80N0AR30V/pI3HU9QyiuiPoBZ4JWGZFDRaClmrhCr3G4K1iIw1pVy0+G5YVkhudsX74FCMba+ry4fbtmdh+UpMo4DDC54F+OLJljAizwrd5lpu/UbPxNtk79IBqV6Ct/DVF2LrBbCLTNgKvx5/efJeLhHbbTCZ/s4tFJdA98LcQkKDQRlPVXknuJjvrTWo856T7pv2MaOWp3Dfz2/rnofxxxQ+NKo8WE/qKVxRWnzCcn39xm28os6aN3cAz0uVr4V3Fnoh1ZRKsUfIUJOnzOnsvJXrdsHCv4/4IkWT8VKE++n78HWGYPnqkOmRKDmlBLO4MDPl89ScAr0cSeVQdiFbMDyVRKyzN5jesSx8i11HhdtsZJuLSPgRuyPppduTECercHEPuzzbI/DYmx6buiYEGwnf64VR1Dzul4K2EoggYOwxMMioKGqtUSC+EE+Mx/+gYZIqNazS53AhrrUQFO6+CJLfe+pqNSIvWN+aNINWYsjS1pdwkRIHQqfEAo65dLG9+cFQkf05q/ZlhcUAQgWA2J02raQIDy0caYxRgjb9wufogMXzKeZjlExVwuPyNslVDYtTHlydCzzud/yQ1I4ZYkdQO1akLlWRDZ8b4yQXf7nzhv8tNku0HQ5624H94eqMJgOLOGMCP85uOGxOKjO6s="
