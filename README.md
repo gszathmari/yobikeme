@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/gszathmari/yobikeme.svg)](https://travis-ci.org/gszathmari/yobikeme)
 [![Coverage Status](https://coveralls.io/repos/gszathmari/yobikeme/badge.svg?branch=master&service=github)](https://coveralls.io/github/gszathmari/yobikeme?branch=master)
+[![Dependency Status](https://david-dm.org/gszathmari/yobikeme.svg)](https://david-dm.org/gszathmari/yobikeme)
 
 Yo the `yobikeme` user and it will send you the nearest cycle hire station
 
