@@ -3,7 +3,7 @@ node_js:
   - '0.12'
   - iojs
 before_install:
-  - npm install -g coffee-script coffeelint mocha mocha-lcov-reporter istanbul coveralls
+  - npm install -g coffee-script coffeelint mocha mocha-lcov-reporter istanbul coveralls grunt-cli
 after_success:
   - mocha --recursive --compilers coffee:coffee-script/register --require coffee-coverage/register-istanbul --reporter mocha-lcov-reporter
   - istanbul report lcov --dir coverage/
