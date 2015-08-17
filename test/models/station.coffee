@@ -31,6 +31,8 @@ describe 'Model: Station', ->
     @stub1 = sinon.stub redis, "get"
     @stub2 = sinon.stub citybikes, "networks"
     @stub3 = sinon.stub citybikes, "stations"
+    @stub4 = sinon.stub redis, "set"
+    @stub5 = sinon.stub redis, "expire"
     @stub1.yields null, null
 
   it 'constructor should instatinate object', (done) ->
@@ -99,4 +101,6 @@ describe 'Model: Station', ->
     @stub1.restore()
     @stub2.restore()
     @stub3.restore()
+    @stub4.restore()
+    @stub5.restore()
     done()

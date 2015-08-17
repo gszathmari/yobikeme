@@ -1,7 +1,7 @@
 {
   "name": "yobikeme",
-  "version": "1.0.0",
-  "description": "Find nearest cycle hire station",
+  "version": "1.0.1",
+  "description": "Double-tap this Yo user and it will send you the walking directions to the nearest cycle hire station",
   "engines": {
     "node": ">=0.10"
   },
@@ -15,11 +15,11 @@
     "geolib": "^2.0.18",
     "newrelic": "^1.21.2",
     "redis": "^0.12.1",
-    "request": "^2.60.0",
     "restify": "^4.0.0",
     "validator": "^4.0.3",
     "winston": "^1.0.1",
-    "winston-logentries": "^1.0.1"
+    "winston-logentries": "^1.0.1",
+    "yo-api2": "0.0.2"
   },
   "devDependencies": {
     "chai": "^3.2.0",
