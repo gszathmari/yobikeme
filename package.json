@@ -3,12 +3,13 @@
   "version": "1.0.1",
   "description": "Double-tap this Yo user and it will send you the walking directions to the nearest cycle hire station",
   "engines": {
-    "node": ">=0.10"
+    "node": ">=0.12"
   },
   "directories": {
     "test": "test"
   },
   "dependencies": {
+    "cfenv": "^1.0.0",
     "chalk": "^1.1.0",
     "citybikes-js": "^0.1.4",
     "coffee-script": "^1.9.3",
