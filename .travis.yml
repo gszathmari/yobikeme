@@ -20,4 +20,6 @@ deploy:
   app:
     master: yobikeme
     testing: yobikemetesting
+  on:
+    all_branches: true
   domain: gszathmari
