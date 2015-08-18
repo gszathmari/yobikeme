@@ -9,6 +9,10 @@ exports.index = (req, res, next) ->
   return next()
 
 exports.yo = (req, res, next) ->
+  # Return error if username was not supplied for any reason
+  unless req.params.username
+    res.send new restify.BadRequestError "Please submit a username"
+    return next(false)
   helpUrl = process.env.YOBIKEME_HELP or "http://bit.ly/yobikeme-help"
   success =
     success: true

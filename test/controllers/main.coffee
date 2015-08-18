@@ -38,12 +38,23 @@ describe 'Controller: yo', ->
     @req2 =
       params:
         username: "unittest"
+    @req3 =
+      params:
+        username: null
     @res =
       send: sinon.spy()
       json: sinon.spy()
     @next = sinon.spy()
     @stub1 = sinon.stub Station.prototype, "locate"
     @stub2 = sinon.stub yoclient, "send"
+
+  it 'should fail if username was not suppled', (done) ->
+    r = main.yo @req3, @res, @next
+    expect(@res.send.calledOnce).be.true
+    expect(@res.send.firstCall.args[0]).have.property('statusCode')
+    expect(@res.send.firstCall.args[0].statusCode).equal(400)
+    expect(@next.calledOnce).be.true
+    done()
 
   it 'should return 404 error', (done) ->
     @stub1.yields new Error, null
