@@ -1,11 +1,12 @@
 #
 # Main API Server
 #
+# Newrelic should be on the top
+newrelic = require './helpers/newrelic'
 
 restify = require 'restify'
 chalk = require 'chalk'
 
-newrelic = require './helpers/newrelic'
 exceptionHandler = require './helpers/exceptionhandler'
 logger = require './helpers/logger'
 
