@@ -1,3 +1,7 @@
+## v1.1.0 (2015-08-19)
+
+  - Switching to IBM BlueMix hosting from OpenShift
+
 ## v1.0.1 (2015-08-18)
 
   - Replace `request` module with `yo-api2`
