@@ -40,9 +40,9 @@
     "precommit-hook": "^3.0.0",
     "sinon": "^1.15.4"
   },
-  "main": "lib/cluster.js",
+  "main": "lib/server.js",
   "scripts": {
-    "start": "node lib/cluster.js",
+    "start": "node lib/server.js",
     "test": "grunt test",
     "postinstall": "coffee --bare --compile --output lib/ src/",
     "validate": "npm ls"

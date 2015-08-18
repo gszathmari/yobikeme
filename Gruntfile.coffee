@@ -14,7 +14,7 @@ module.exports = (grunt) ->
           atBegin: true
     develop:
       server:
-        file: 'src/cluster.coffee'
+        file: 'src/server.coffee'
         cmd: 'coffee'
     coffee:
       compile:
