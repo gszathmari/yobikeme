@@ -1,3 +1,7 @@
+## v1.1.1 (2015-08-19)
+
+  - Return error if username is not supplied with the API call
+
 ## v1.1.0 (2015-08-19)
 
   - Switching to IBM BlueMix hosting from OpenShift
