@@ -1,3 +1,10 @@
+## v1.2.0 (2015-08-19)
+
+  - Fixing Newrelic support
+  - Code refactoring in models: simplifying the Station model
+  - Fixing minor issue with Gruntfile
+  - Add /version and /hash endpoints
+
 ## v1.1.1 (2015-08-19)
 
   - Return error if username is not supplied with the API call

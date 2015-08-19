@@ -1,6 +1,6 @@
 {
   "name": "yobikeme",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Double-tap this Yo user and it will send you the walking directions to the nearest cycle hire station",
   "engines": {
     "node": ">=0.12"
@@ -14,10 +14,11 @@
     "citybikes-js": "^0.1.4",
     "coffee-script": "^1.9.3",
     "geolib": "^2.0.18",
+    "git-rev": "^0.2.1",
     "newrelic": "^1.21.2",
     "redis": "^0.12.1",
     "restify": "^4.0.0",
-    "validator": "^4.0.3",
+    "version-healthcheck": "^0.1.2",
     "winston": "^1.0.1",
     "winston-logentries": "^1.0.1",
     "yo-api2": "0.0.2"
@@ -38,14 +39,16 @@
     "grunt-mocha-test": "^0.12.7",
     "mocha": "^2.2.5",
     "precommit-hook": "^3.0.0",
-    "sinon": "^1.15.4"
+    "sinon": "^1.15.4",
+    "validator": "^4.0.3"
   },
   "main": "lib/server.js",
   "scripts": {
     "start": "node lib/server.js",
     "test": "grunt test",
     "postinstall": "coffee --bare --compile --output lib/ src/",
-    "validate": "npm ls"
+    "validate": "npm ls",
+    "build-hash": "mkdir ./config && git rev-parse --short=7 HEAD > ./config/BUILD"
   },
   "repository": {
     "type": "git",

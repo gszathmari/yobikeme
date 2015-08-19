@@ -4,7 +4,7 @@ module.exports = (grunt) ->
       dev:
         WORKERS: 1
         COFFEECOV_INIT_ALL: false
-        YO_API_TOKEN: "secret"
+        YO_API_TOKEN: process.env.YO_API_TOKEN or "secret"
     watch:
       app:
         files: ['src/**/*.coffee']
