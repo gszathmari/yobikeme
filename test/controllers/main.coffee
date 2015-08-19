@@ -26,6 +26,32 @@ describe 'Controller: index', ->
     res.send.reset()
     next.reset()
 
+describe 'Controller: hash', ->
+  before (done) ->
+    # Stub request and response objects
+    @req = sinon.spy()
+    @res =
+      json: sinon.spy()
+    @next = sinon.spy()
+    @r = main.hash @req, @res, @next
+    setTimeout ->
+      done()
+    , 500
+
+  it "should respond with hash", (done) ->
+    console.dir @r
+    expect(@req.called).be.false
+    expect(@res.json.calledOnce).be.true
+    expect(@res.json.firstCall.args[0]).have.property('hash')
+    expect(@res.json.firstCall.args[0].hash).to.be.a('string')
+    expect(@next.calledOnce).be.true
+    done()
+
+  after ->
+    @req.reset()
+    @res.json.reset()
+    @next.reset()
+
 describe 'Controller: yo', ->
   mapsUrl = "https://www.google.com/maps/dir/0.0,0.0/0.0,0.0/data=!4m2!4m1!3e2"
   helperUrl = "http://bit.ly/yobikeme-help"

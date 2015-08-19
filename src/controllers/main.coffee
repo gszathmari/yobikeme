@@ -1,12 +1,22 @@
 restify = require 'restify'
+git = require 'git-rev'
 
 Station = require '../models/station'
 logger = require '../helpers/logger'
 yoclient = require '../helpers/yoclient'
 
+# Serve simple message on index
 exports.index = (req, res, next) ->
   res.send "OK"
   return next()
+
+# Serve commit hash
+exports.hash = (req, res, next) ->
+  git.long (hash) ->
+    m =
+      hash: hash
+    res.json m
+    return next()
 
 exports.yo = (req, res, next) ->
   # Return error if username was not supplied for any reason
