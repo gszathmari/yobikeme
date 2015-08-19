@@ -219,7 +219,7 @@ describe 'Model: Station.locate', ->
   it 'should return error if geolib fails finding nearestStation', (done) ->
     @stub1.yields null, null
     @stub2.callsArgWith 1, null, null
-    @stub3.throws()
+    @stub3.onFirstCall().returns(nearestNetwork).onSecondCall().throws()
     result = @station.locate @callback
     expect(@callback.calledOnce).be.true
     expect(@callback.firstCall.args[0]).be.error

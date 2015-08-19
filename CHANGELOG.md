@@ -1,3 +1,7 @@
+## v1.2.1 (xxxx-xx-xx)
+
+  - Improve unit test coverage
+
 ## v1.2.0 (2015-08-19)
 
   - Fixing Newrelic support
