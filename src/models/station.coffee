@@ -1,4 +1,3 @@
-{EventEmitter}  = require 'events'
 geolib = require 'geolib'
 citybikes = require 'citybikes-js'
 redis = require '../helpers/redis'
@@ -6,7 +5,6 @@ logger = require '../helpers/logger'
 
 class Station
   constructor: (@location) ->
-    @events = new EventEmitter
     data = @location.split ';'
     @coordinates =
       latitude: data[0]
@@ -34,64 +32,84 @@ class Station
     url += '/data=!4m2!4m1!3e2'
     return url
 
-  locate: (callback) ->
-    @events.on "networksRetrieved", (networks) =>
-      try
-        # Find the nearest cycle hire service
-        nearestNetwork = geolib.findNearest @coordinates, networks
-      catch
-        # Throw exception if coordinates from Yo are invalid
-        err = new Error "Error while finding nearest networks with geolib"
-        logger.error err.message
-        callback err, null
-        return false
-      # Retrieve list of stations from cache
-      redis.get nearestNetwork.key, (err, stations) =>
-        if stations
-          @events.emit "stationsRetrieved", JSON.parse stations
-        # Retrieve from CityBikes if data is not cached
-        else
-          citybikes.stations nearestNetwork.key, (err, results) =>
-            if err
-              logger.error err.message
-              callback err, null
-              return false
-            # Transform CityBikes format to geolib format
-            stations = @processItems results
-            @events.emit "stationsRetrieved", stations
-            redis.set nearestNetwork.key, JSON.stringify stations
-            redis.expire nearestNetwork.key, 60 * 5
-
-    # Find nearest cycle hire station
-    @events.on "stationsRetrieved", (stations) =>
-      try
-        nearestStation = geolib.findNearest @coordinates, stations
-      catch
-        # Throw exception if coordinates from Yo are invalid
-        err = new Error "Error while finding nearest stations with geolib"
-        logger.error err.message
-        callback err, null
-        return false
-      # Construct Google Maps URL
-      mapsUrl = @constructUrl nearestStation
-      # Send result back via callback
-      callback null, mapsUrl
-
+  # Retrieve and cache list of cycle hire networks from CityBikes
+  getNetworks: (callback) ->
     # Retrieve cycle hire networks from cache
     redis.get "networks", (err, networks) =>
       if networks
-        @events.emit "networksRetrieved", JSON.parse networks
+        callback null, JSON.parse networks
+        return true
       else
-        # Retrieve from CityBikes if data is not cached
+        # Retrieve from CityBikes if data was not cached
         citybikes.networks (err, results) =>
           if err
-            logger.error err.message
             callback err, null
             return false
-          # Transform CityBikes format to geolib format
-          networks = @processItems results
-          @events.emit "networksRetrieved", networks
-          redis.set "networks", JSON.stringify networks
-          redis.expire "networks", 60 * 30
+          else
+            # Transform CityBikes format to geolib format
+            networks = @processItems results
+            # Return results with callback
+            callback null, networks
+            # Cache results in Redis
+            redis.set "networks", JSON.stringify networks
+            redis.expire "networks", 60 * 60
+            return true
+
+  # Retrieve and cache list of cycle hire stations from CityBikes
+  getStations: (networkName, callback) ->
+    # Retrieve list of stations from cache
+    redis.get networkName, (err, stations) =>
+      if stations
+        callback null, JSON.parse stations
+        return true
+      # Retrieve from CityBikes if data was not cached
+      else
+        citybikes.stations networkName, (err, results) =>
+          if err
+            callback err, null
+            return false
+          else
+            # Transform CityBikes format to geolib format
+            stations = @processItems results
+            # Return results with callback
+            callback null, stations
+            # Cache results in Redis
+            redis.set networkName, JSON.stringify stations
+            redis.expire networkName, 60 * 5
+            return true
+
+  # Locate the nearest cycle hire station
+  locate: (callback) ->
+    @getNetworks (err, networks) =>
+      if err
+        # Return error if getting cycle hire networks has failed
+        callback err, null
+        return false
+      else
+        try
+          # Find the nearest cycle hire service
+          nearestNetwork = geolib.findNearest @coordinates, networks
+        catch
+          # Return error if geolib throws exception
+          err = new Error "geolib error while finding networks"
+          callback err, null
+          return false
+        @getStations nearestNetwork.key, (err, stations) =>
+          if err
+            # Return error if getting cycle hire stations has failed
+            callback err, null
+            return false
+          else
+            try
+              # Find the nearest cycle hire station
+              nearestStation = geolib.findNearest @coordinates, stations
+            catch
+              # Return error if geolib throws exception
+              err = new Error "geolib error while finding stations"
+              callback err, null
+              return false
+            # Construct URL and send it back via callback
+            callback null, @constructUrl nearestStation
+            return true
 
 module.exports = Station
