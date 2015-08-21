@@ -20,10 +20,14 @@ describe 'Model: Station', ->
     id: "abc123"
     geometry:
       coordinates: ["43.344827", "-70.028664"]
+    properties:
+      free_bikes: 10
   item2 =
     id: "xyz987"
     geometry:
       coordinates: ["12.343109", "20.023661"]
+    properties:
+      free_bikes: 0
   items = [item1, item2]
   error = new Error "Unit test error, please ignore"
   networks_redis =
@@ -43,6 +47,7 @@ describe 'Model: Station', ->
       name: 'Unit Test'
       city: 'Unit'
       country: 'Test'
+      free_bikes: 51
     id: 'unit-test1'
   citybikes2 =
     type: 'Feature'
@@ -54,6 +59,7 @@ describe 'Model: Station', ->
       name: 'Unit Test'
       city: 'Unit'
       country: 'Test'
+      free_bikes: 22
     id: 'unit-test2'
   networks_citybikes = [citybikes1, citybikes2]
 
@@ -66,7 +72,8 @@ describe 'Model: Station', ->
     @stub5 = sinon.stub redis, "expire"
 
   it 'constructor should instatinate object', (done) ->
-    expect(@station).to.respondTo('processItems')
+    expect(@station).to.respondTo('processNetworks')
+    expect(@station).to.respondTo('processStations')
     expect(@station).to.respondTo('constructUrl')
     expect(@station).to.respondTo('getNetworks')
     expect(@station).to.respondTo('getStations')
@@ -76,14 +83,22 @@ describe 'Model: Station', ->
     expect(@station.coordinates.longitude).to.be.equal(longitude)
     done()
 
-  it 'processItems should transform objects', (done) ->
-    result = @station.processItems(items)
-    expect(result[item1.id]).to.be.an('object')
-    expect(result[item1.id].latitude).to.equal(item1.geometry.coordinates[1])
-    expect(result[item2.id].longitude).to.equal(item2.geometry.coordinates[0])
-    expect(result[item2.id].latitude).to.equal(item2.geometry.coordinates[1])
-    expect(result[item2.id].longitude).to.equal(item2.geometry.coordinates[0])
-    done()
+  it 'processNetworks should transform objects', (done) ->
+    @station.processNetworks items, (err, networks) ->
+      expect(networks[item1.id]).to.be.an('object')
+      expect(networks[item1.id].latitude).to.equal(item1.geometry.coordinates[1])
+      expect(networks[item1.id].longitude).to.equal(item1.geometry.coordinates[0])
+      expect(networks[item2.id].latitude).to.equal(item2.geometry.coordinates[1])
+      expect(networks[item2.id].longitude).to.equal(item2.geometry.coordinates[0])
+      done()
+
+  it 'processStations should transform objects', (done) ->
+    @station.processStations items, (err, stations) ->
+      expect(stations[item1.id]).to.be.an('object')
+      expect(stations[item1.id].latitude).to.equal(item1.geometry.coordinates[1])
+      expect(stations[item1.id].longitude).to.equal(item1.geometry.coordinates[0])
+      expect(stations[item2.id]).be.undefined
+      done()
 
   it 'constructUrl should return valid URL', (done) ->
     mapsUrl = @station.constructUrl nearestStation
@@ -150,10 +165,7 @@ describe 'Model: Station', ->
       be.equal(item1.geometry.coordinates[0])
     expect(callback.firstCall.args[1][item1.id].latitude).
       be.equal(item1.geometry.coordinates[1])
-    expect(callback.firstCall.args[1][item2.id].longitude).
-      be.equal(item2.geometry.coordinates[0])
-    expect(callback.firstCall.args[1][item2.id].latitude).
-      be.equal(item2.geometry.coordinates[1])
+    expect(callback.firstCall.args[1][item2.id]).be.undefined
     done()
 
   it 'getStations should return error if upstream API fails', (done) ->

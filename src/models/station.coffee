@@ -10,14 +10,33 @@ class Station
       latitude: data[0]
       longitude: data[1]
 
-  # Transform CityBikes response into geolib object
-  processItems: (items) ->
-    result = new Object
-    for item in items
-      result[item.id] =
-        latitude: item.geometry.coordinates[1]
-        longitude: item.geometry.coordinates[0]
-    return result
+  # Transform CityBikes networks into geolib object
+  processNetworks: (networks, callback) ->
+    results = new Object
+    counter = 0
+    for network in networks
+      results[network.id] =
+        latitude: network.geometry.coordinates[1]
+        longitude: network.geometry.coordinates[0]
+      # Return with callback when iteration is ready
+      if ++counter is networks.length
+        callback null, results
+        return true
+
+  # Transform CityBikes stations into geolib object
+  processStations: (stations, callback) ->
+    results = new Object
+    counter = 0
+    for station in stations
+      # Only add stations with available bikes
+      if station.properties.free_bikes > 0
+        results[station.id] =
+          latitude: station.geometry.coordinates[1]
+          longitude: station.geometry.coordinates[0]
+      # Return with callback when iteration is ready
+      if ++counter is stations.length
+        callback null, results
+        return true
 
   # Create Google Maps walking directions URL
   constructUrl: (nearestStation) ->
@@ -48,13 +67,13 @@ class Station
             return false
           else
             # Transform CityBikes format to geolib format
-            networks = @processItems results
-            # Return results with callback
-            callback null, networks
-            # Cache results in Redis
-            redis.set [networksName, JSON.stringify networks], (err) ->
-              redis.expire networksName, 60 * 60 unless err
-            return true
+            @processNetworks results, (err, networks) ->
+              # Return results with callback
+              callback null, networks
+              # Cache results in Redis
+              redis.set [networksName, JSON.stringify networks], (err) ->
+                redis.expire networksName, 60 * 60 unless err
+              return true
 
   # Retrieve and cache list of cycle hire stations from CityBikes
   getStations: (networkName, callback) ->
@@ -71,13 +90,13 @@ class Station
             return false
           else
             # Transform CityBikes format to geolib format
-            stations = @processItems results
-            # Return results with callback
-            callback null, stations
-            # Cache results in Redis
-            redis.set [networkName, JSON.stringify stations], (err) ->
-              redis.expire networkName, 60 * 3 unless err
-            return true
+            @processStations results, (err, stations) ->
+              # Return results with callback
+              callback null, stations
+              # Cache results in Redis
+              redis.set [networkName, JSON.stringify stations], (err) ->
+                redis.expire networkName, 60 * 3 unless err
+              return true
 
   # Locate the nearest cycle hire station
   locate: (callback) ->

@@ -39,7 +39,6 @@ describe 'Controller: hash', ->
     , 500
 
   it "should respond with hash", (done) ->
-    console.dir @r
     expect(@req.called).be.false
     expect(@res.json.calledOnce).be.true
     expect(@res.json.firstCall.args[0]).have.property('hash')
