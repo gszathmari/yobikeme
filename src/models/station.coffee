@@ -34,8 +34,9 @@ class Station
 
   # Retrieve and cache list of cycle hire networks from CityBikes
   getNetworks: (callback) ->
+    networksName = "networks"
     # Retrieve cycle hire networks from cache
-    redis.get "networks", (err, networks) =>
+    redis.get networksName, (err, networks) =>
       if networks
         callback null, JSON.parse networks
         return true
@@ -51,8 +52,8 @@ class Station
             # Return results with callback
             callback null, networks
             # Cache results in Redis
-            redis.set "networks", JSON.stringify networks
-            redis.expire "networks", 60 * 60
+            redis.set [networksName, JSON.stringify networks], (err) ->
+              redis.expire networksName, 60 * 60 unless err
             return true
 
   # Retrieve and cache list of cycle hire stations from CityBikes
@@ -74,8 +75,8 @@ class Station
             # Return results with callback
             callback null, stations
             # Cache results in Redis
-            redis.set networkName, JSON.stringify stations
-            redis.expire networkName, 60 * 5
+            redis.set [networkName, JSON.stringify stations], (err) ->
+              redis.expire networkName, 60 * 3 unless err
             return true
 
   # Locate the nearest cycle hire station

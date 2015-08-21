@@ -1,3 +1,8 @@
+## v1.2.1 (2015-08-21)
+
+  - Improve unit test coverage
+  - Improve Redis related code in Stations model a bit
+
 ## v1.2.0 (2015-08-19)
 
   - Fixing Newrelic support
