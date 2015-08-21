@@ -1,3 +1,7 @@
+## v1.3.0 (2015-08-21)
+
+  - Only return walking directions to stations with bikes available
+
 ## v1.2.1 (2015-08-21)
 
   - Improve unit test coverage
