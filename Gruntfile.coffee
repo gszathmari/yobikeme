@@ -3,8 +3,13 @@ module.exports = (grunt) ->
     env:
       dev:
         WORKERS: 1
+        YO_API_TOKEN: process.env.YO_API_TOKEN or "secret"
+      test:
+        WORKERS: 1
         COFFEECOV_INIT_ALL: false
         YO_API_TOKEN: process.env.YO_API_TOKEN or "secret"
+        KEEN_PROJECT_ID: "000000000"
+        KEEN_WRITE_API_KEY: "SECRET"
     watch:
       app:
         files: ['src/**/*.coffee']
@@ -66,7 +71,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-file-exists'
 
   grunt.registerTask 'default', ['env:dev', 'watch:app']
-  grunt.registerTask 'test', ['env:dev', 'coffeelint', 'mochaTest:test']
+  grunt.registerTask 'test', ['env:test', 'coffeelint', 'mochaTest:test']
   grunt.registerTask 'coverage', ['clean:reports', 'env:dev', 'mochaTest:coverage']
   grunt.registerTask 'mkreport', ['fileExists:coverage', 'makeReport', 'clean:coverage']
   grunt.registerTask 'build', ['clean:js', 'coffee']

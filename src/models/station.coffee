@@ -39,17 +39,27 @@ class Station
         return true
 
   # Create Google Maps walking directions URL
-  constructUrl: (nearestStation) ->
-    url = "https://www.google.com/maps/dir/"
-    url += @coordinates.latitude
-    url += ','
-    url += @coordinates.longitude
-    url += '/'
-    url += nearestStation.latitude
-    url += ','
-    url += nearestStation.longitude
-    url += '/data=!4m2!4m1!3e2'
-    return url
+  constructResponse: (nearestStation) ->
+    mapsUrl = "https://www.google.com/maps/dir/"
+    mapsUrl += @coordinates.latitude
+    mapsUrl += ','
+    mapsUrl += @coordinates.longitude
+    mapsUrl += '/'
+    mapsUrl += nearestStation.latitude
+    mapsUrl += ','
+    mapsUrl += nearestStation.longitude
+    mapsUrl += '/data=!4m2!4m1!3e2'
+    directions =
+      url: mapsUrl
+      location: [
+        parseFloat @coordinates.latitude
+        parseFloat @coordinates.longitude
+      ]
+      destination: [
+        parseFloat nearestStation.latitude
+        parseFloat nearestStation.longitude
+      ]
+    return directions
 
   # Retrieve and cache list of cycle hire networks from CityBikes
   getNetworks: (callback) ->
@@ -119,6 +129,11 @@ class Station
             # Return error if getting cycle hire stations has failed
             callback err, null
             return false
+          # Handle cases when no station was found nearby
+          if Object.keys(stations).length is 0
+            err = new Error "Could not retrieve cycle hire stations"
+            callback err, null
+            return false
           else
             try
               # Find the nearest cycle hire station
@@ -129,7 +144,7 @@ class Station
               callback err, null
               return false
             # Construct URL and send it back via callback
-            callback null, @constructUrl nearestStation
+            callback null, @constructResponse nearestStation
             return true
 
 module.exports = Station

@@ -52,7 +52,10 @@ describe 'Controller: hash', ->
     @next.reset()
 
 describe 'Controller: yo', ->
-  mapsUrl = "https://www.google.com/maps/dir/0.0,0.0/0.0,0.0/data=!4m2!4m1!3e2"
+  response =
+    url: "https://www.google.com/maps/dir/0.0,0.0/0.0,0.0/data=!4m2!4m1!3e2"
+    location: [42.344827, -71.028664]
+    destination: [12.33434, -23.23211232]
   helperUrl = "http://bit.ly/yobikeme-help"
 
   beforeEach ->
@@ -93,7 +96,7 @@ describe 'Controller: yo', ->
     done()
 
   it 'should return Google Maps URL', (done) ->
-    @stub1.yields null, mapsUrl
+    @stub1.yields null, response
     @stub2.callsArgWith 2, null, null
     r = main.yo @req, @res, @next
     expect(@res.json.calledOnce).be.true
@@ -102,7 +105,7 @@ describe 'Controller: yo', ->
     done()
 
   it 'should fail if Yo directions cannot be sent', (done) ->
-    @stub1.yields null, mapsUrl
+    @stub1.yields null, response
     @stub2.callsArgWith 2, new Error, null
     r = main.yo @req, @res, @next
     expect(@res.send.calledOnce).be.true
