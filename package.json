@@ -60,6 +60,13 @@
     "email": "gszathmari@gmail.com",
     "homepage": "http://gaborszathmari.me"
   },
+  "keywords": [
+    "bluemix",
+    "cycle",
+    "yo",
+    "justyo",
+    "bicycle"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/gszathmari/yobikeme/issues"
