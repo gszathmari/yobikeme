@@ -13,7 +13,9 @@ after_success:
   - git remote add deploy https://$USER:$PASSWORD@hub.jazz.net/git/gszathmari/yobikeme
   - git push deploy -f
 env:
-  - NODE_ENV=ci YO_API_TOKEN=secret
+  - YO_API_TOKEN=secret
+services:
+  - redis-server
 branches:
   only:
     - master

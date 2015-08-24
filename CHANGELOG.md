@@ -2,6 +2,7 @@
 
   - Add optional Keen.io support for event logging
   - Fixing minor bug when stations is not returned from upstream API
+  - Activate Redis and minor change in Travis file
 
 ## v1.3.0 (2015-08-21)
 
