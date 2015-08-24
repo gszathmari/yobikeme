@@ -8,13 +8,13 @@ class EventLogger
       projectId: process.env.KEEN_PROJECT_ID
       writeKey: process.env.KEEN_WRITE_API_KEY
       protocol: "https"
-    @configured = options.projectId and options.writeKey
-    @client = new Keen options
+    configured = options.projectId and options.writeKey
+    @client = new Keen options if configured
 
   # Send event to Keen.io
   sendEvent: (eventName, eventData) ->
     # Check if environmental variables are configured or fail silently
-    if @configured
+    if @client
       @client.addEvent eventName, eventData, (err, res) ->
         if err
           m = "Error while sending #{eventName} event to Keen.io: #{err}"
