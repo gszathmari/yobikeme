@@ -1,3 +1,7 @@
+## v1.5.3 (2015-08-27)
+
+  - Input validate incoming parameters
+
 ## v1.5.2 (2015-08-26)
 
   - Improve unit test coverage

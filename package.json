@@ -1,6 +1,6 @@
 {
   "name": "yobikeme",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "Double-tap this Yo user and it will send you the walking directions to the nearest cycle hire station",
   "engines": {
     "node": ">=0.12"
@@ -20,6 +20,7 @@
     "redis": "^0.12.1",
     "restify": "^4.0.0",
     "rollbar": "^0.5.6",
+    "validator": "^4.0.5",
     "version-healthcheck": "^0.1.2",
     "winston": "^1.0.1",
     "winston-logentries": "^1.0.1",

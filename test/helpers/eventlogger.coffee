@@ -1,6 +1,7 @@
 chai = require 'chai'
 sinon = require 'sinon'
 
+User = require '../../src/models/user'
 eventLogger = require '../../src/helpers/eventlogger'
 
 expect = chai.expect
@@ -19,6 +20,7 @@ describe 'Helper: eventlogger (methods)', ->
       params:
         username: "unittest"
         ip_address: "127.0.0.1"
+    @user = new User @req.params
     @directions =
       url: "http://maps.google.com/"
       destination: [1.111111, 2.222222]
@@ -28,7 +30,7 @@ describe 'Helper: eventlogger (methods)', ->
 
   it 'fireDirections should return event', (done) ->
     @stub.callsArgWith 2, null, null
-    eventLogger.fireDirections @req, @directions
+    eventLogger.fireDirections @user, @directions
     expect(@stub.calledOnce).be.true
     expect(@stub.firstCall.args[0]).be.equal("directions")
     expect(@stub.firstCall.args[1]).have.property('user')
@@ -66,7 +68,7 @@ describe 'Helper: eventlogger (methods)', ->
 
   it 'fireInstructions should return event', (done) ->
     @stub.callsArgWith 2, null, null
-    eventLogger.fireInstructions @req, @helperUrl
+    eventLogger.fireInstructions @user, @helperUrl
     expect(@stub.calledOnce).be.true
     expect(@stub.firstCall.args[0]).be.equal("instructions")
     expect(@stub.firstCall.args[1]).have.property('user')
@@ -97,7 +99,7 @@ describe 'Helper: eventlogger (methods)', ->
   it 'fireErrors should return event', (done) ->
     error = new Error "Unit testing please ignore"
     @stub.callsArgWith 2, null, null
-    eventLogger.fireErrors @req, error
+    eventLogger.fireErrors @user, error
     expect(@stub.calledOnce).be.true
     expect(@stub.firstCall.args[0]).be.equal("errors")
     expect(@stub.firstCall.args[1]).have.property('user')

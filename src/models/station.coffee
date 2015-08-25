@@ -3,11 +3,7 @@ citybikes = require 'citybikes-js'
 redis = require '../helpers/redis'
 
 class Station
-  constructor: (@location) ->
-    data = @location.split ';'
-    @coordinates =
-      latitude: data[0]
-      longitude: data[1]
+  constructor: (@user) ->
 
   # Transform CityBikes networks into geolib object
   processNetworks: (networks, callback) ->
@@ -26,23 +22,34 @@ class Station
   processStations: (stations, callback) ->
     results = new Object
     counter = 0
-    for station in stations
-      # Only add stations with available bikes
-      if station.properties.free_bikes > 0
-        results[station.id] =
-          latitude: station.geometry.coordinates[1]
-          longitude: station.geometry.coordinates[0]
-      # Return with callback when iteration is ready
-      if ++counter is stations.length
-        callback null, results
-        return true
+    error = new Error "error while retrieving stations"
+    # Check if we have any stations at all
+    if stations.length is 0
+      callback error, null
+      return true
+    else
+      for station in stations
+        # Only add stations with available bikes
+        if station.properties.free_bikes > 0
+          results[station.id] =
+            latitude: station.geometry.coordinates[1]
+            longitude: station.geometry.coordinates[0]
+        # Return with callback when iteration is ready
+        if ++counter is stations.length
+          # If we have not found any stations with available bikes
+          if Object.keys(results).length is 0
+            callback error, null
+          # Returns cycle hire stations
+          else
+            callback null, results
+          return true
 
   # Create Google Maps walking directions URL
   constructResponse: (nearestStation) ->
     mapsUrl = "https://www.google.com/maps/dir/"
-    mapsUrl += @coordinates.latitude
+    mapsUrl += @user.getLocation().latitude
     mapsUrl += ','
-    mapsUrl += @coordinates.longitude
+    mapsUrl += @user.getLocation().longitude
     mapsUrl += '/'
     mapsUrl += nearestStation.latitude
     mapsUrl += ','
@@ -51,8 +58,8 @@ class Station
     directions =
       url: mapsUrl
       location: [
-        parseFloat @coordinates.latitude
-        parseFloat @coordinates.longitude
+        parseFloat @user.getLocation().latitude
+        parseFloat @user.getLocation().longitude
       ]
       destination: [
         parseFloat nearestStation.latitude
@@ -78,10 +85,11 @@ class Station
             # Transform CityBikes format to geolib format
             @processNetworks results, (err, networks) ->
               # Return results with callback
-              callback null, networks
+              callback err, networks
               # Cache results in Redis
-              redis.set [networksName, JSON.stringify networks], (err) ->
-                redis.expire networksName, 60 * 60 unless err
+              unless err
+                redis.set [networksName, JSON.stringify networks], (err) ->
+                  redis.expire networksName, 60 * 60 unless err
               return true
 
   # Retrieve and cache list of cycle hire stations from CityBikes
@@ -101,10 +109,11 @@ class Station
             # Transform CityBikes format to geolib format
             @processStations results, (err, stations) ->
               # Return results with callback
-              callback null, stations
+              callback err, stations
               # Cache results in Redis
-              redis.set [networkName, JSON.stringify stations], (err) ->
-                redis.expire networkName, 60 * 3 unless err
+              unless err
+                redis.set [networkName, JSON.stringify stations], (err) ->
+                  redis.expire networkName, 60 * 3 unless err
               return true
 
   # Locate the nearest cycle hire station
@@ -117,7 +126,7 @@ class Station
       else
         try
           # Find the nearest cycle hire service
-          nearestNetwork = geolib.findNearest @coordinates, networks
+          nearestNetwork = geolib.findNearest @user.getLocation(), networks
         catch
           # Return error if geolib throws exception
           err = new Error "geolib error while finding networks"
@@ -128,15 +137,10 @@ class Station
             # Return error if getting cycle hire stations has failed
             callback err, null
             return false
-          # Handle cases when no station was found nearby
-          if Object.keys(stations).length is 0
-            err = new Error "Could not retrieve cycle hire stations"
-            callback err, null
-            return false
           else
             try
               # Find the nearest cycle hire station
-              nearestStation = geolib.findNearest @coordinates, stations
+              nearestStation = geolib.findNearest @user.getLocation(), stations
             catch
               # Return error if geolib throws exception
               err = new Error "geolib error while finding stations"
