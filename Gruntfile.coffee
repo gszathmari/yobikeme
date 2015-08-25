@@ -11,6 +11,7 @@ module.exports = (grunt) ->
         KEEN_PROJECT_ID: "000000000"
         KEEN_WRITE_API_KEY: "SECRET"
         YOBIKEME_ERROR: "http://bit.ly/yobikeme-help"
+        ROLLBAR_ACCESS_TOKEN: "secret"
     watch:
       app:
         files: ['src/**/*.coffee']
