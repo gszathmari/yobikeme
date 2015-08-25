@@ -74,7 +74,7 @@ describe 'Model: Station', ->
   it 'constructor should instatinate object', (done) ->
     expect(@station).to.respondTo('processNetworks')
     expect(@station).to.respondTo('processStations')
-    expect(@station).to.respondTo('constructUrl')
+    expect(@station).to.respondTo('constructResponse')
     expect(@station).to.respondTo('getNetworks')
     expect(@station).to.respondTo('getStations')
     expect(@station).to.respondTo('locate')
@@ -100,13 +100,19 @@ describe 'Model: Station', ->
       expect(stations[item2.id]).be.undefined
       done()
 
-  it 'constructUrl should return valid URL', (done) ->
-    mapsUrl = @station.constructUrl nearestStation
-    expect(mapsUrl).to.contain(nearestStation.latitude)
-    expect(mapsUrl).to.contain(nearestStation.longitude)
-    expect(mapsUrl).to.contain(latitude)
-    expect(mapsUrl).to.contain(longitude)
-    expect(validator.isURL mapsUrl).be.true
+  it 'constructResponse should return valid URL', (done) ->
+    directions = @station.constructResponse nearestStation
+    expect(directions.url).to.contain(nearestStation.latitude)
+    expect(directions.url).to.contain(nearestStation.longitude)
+    expect(directions.url).to.contain(latitude)
+    expect(directions.url).to.contain(longitude)
+    expect(validator.isURL directions.url).be.true
+    expect(directions.location).be.an('array').with.length(2)
+    expect(directions.location[0]).be.a('number')
+    expect(directions.location[1]).be.a('number')
+    expect(directions.destination).be.an('array').with.length(2)
+    expect(directions.destination[0]).be.a('number')
+    expect(directions.destination[1]).be.a('number')
     done()
 
   it 'getNetworks should return cycle hire networks from cache', (done) ->
@@ -228,9 +234,18 @@ describe 'Model: Station.locate', ->
     expect(@callback.firstCall.args[0]).be.error
     done()
 
+  it 'should return error if stations Object is empty', (done) ->
+    @stub1.yields null, null
+    @stub2.callsArgWith 1, null, {}
+    @stub3.returns nearestNetwork
+    result = @station.locate @callback
+    expect(@callback.calledOnce).be.true
+    expect(@callback.firstCall.args[0]).be.error
+    done()
+
   it 'should return error if geolib fails finding nearestStation', (done) ->
     @stub1.yields null, null
-    @stub2.callsArgWith 1, null, null
+    @stub2.callsArgWith 1, null, nearestStation
     @stub3.onFirstCall().returns(nearestNetwork).onSecondCall().throws()
     result = @station.locate @callback
     expect(@callback.calledOnce).be.true
@@ -239,12 +254,12 @@ describe 'Model: Station.locate', ->
 
   it 'should return Google Maps URL', (done) ->
     @stub1.yields null, null
-    @stub2.callsArgWith 1, null, null
+    @stub2.callsArgWith 1, null, nearestStation
     @stub3.returns nearestStation
     result = @station.locate @callback
     expect(@callback.calledOnce).be.true
     expect(@callback.firstCall.args[0]).be.null
-    expect(@callback.firstCall.args[1]).be.equal(mapsUrl)
+    expect(@callback.firstCall.args[1].url).be.equal(mapsUrl)
     done()
 
   afterEach ->

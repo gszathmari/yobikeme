@@ -24,6 +24,8 @@ The following environmental variables should be configured
 - `REDIS_PORT`: _(default: 6379)_ Redis server port
 - `REDIS_PASSWORD`: _(optional)_ Redis credentials
 - `LOGENTRIES_TOKEN`: _(optional)_ Logentries secret token
+- `KEEN_PROJECT_ID`: _(optional)_ Keen.io project ID for event logging
+- `KEEN_WRITE_API_KEY`: _(optional)_ Keen.io write API key
 
 ## Testing
 

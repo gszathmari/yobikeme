@@ -4,6 +4,7 @@ git = require 'git-rev'
 Station = require '../models/station'
 logger = require '../helpers/logger'
 yoclient = require '../helpers/yoclient'
+eventLogger = require '../helpers/eventlogger'
 
 # Serve simple message on index
 exports.index = (req, res, next) ->
@@ -39,13 +40,16 @@ exports.yo = (req, res, next) ->
       else
         # Great success!
         logger.info "SUCCESS: Yo help sent to #{req.params.username}"
+        # Fire 'instructions' event
+        eventLogger.fireInstructions req, helpUrl
+        # Send API response back and close connection
         res.json success
         return next()
   # Double-taps: retrieve nearest cycle hire station and Yo it back
   else
     station = new Station req.params.location
     # Retrieve nearest cycle hire station
-    station.locate (err, mapsUrl) ->
+    station.locate (err, directions) ->
       if err
         # Send 404 if CityBikes lookup has failed
         message = "Error while retrieving the nearest station for user
@@ -55,7 +59,7 @@ exports.yo = (req, res, next) ->
         return next(false)
       else
         # Yo back the Google Maps directions
-        yoclient.send req.params.username, mapsUrl, (err, response) ->
+        yoclient.send req.params.username, directions.url, (err, response) ->
           if err
             # Send error back if sending Yo has failed
             message = "Error while submitting Yo directions
@@ -66,5 +70,8 @@ exports.yo = (req, res, next) ->
           else
             # Great success!
             logger.info "SUCCESS: Yo directions sent to #{req.params.username}"
+            # Fire 'directions' event
+            eventLogger.fireDirections req, directions
+            # Send API response back and close connection
             res.json success
             return next()
