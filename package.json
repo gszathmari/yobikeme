@@ -19,6 +19,7 @@
     "newrelic": "^1.21.2",
     "redis": "^0.12.1",
     "restify": "^4.0.0",
+    "rollbar": "^0.5.6",
     "version-healthcheck": "^0.1.2",
     "winston": "^1.0.1",
     "winston-logentries": "^1.0.1",
