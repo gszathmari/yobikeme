@@ -72,4 +72,23 @@ class EventLogger
         ]
     @sendEvent "instructions", instructionsEvent
 
+  fireErrors: (req, error) ->
+    errorsEvent =
+      user:
+        id: req.params.username or "unknown"
+        ip_address: req.params.user_ip or "127.0.0.1"
+      error:
+        name: error.name
+        message: error.message
+      keen:
+        addons: [
+          {
+            name: "keen:ip_to_geo"
+            input:
+              ip: "user.ip_address"
+            output: "ip_geo_info"
+          }
+        ]
+    @sendEvent "errors", errorsEvent
+
 module.exports = new EventLogger

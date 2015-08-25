@@ -25,6 +25,7 @@ exports.yo = (req, res, next) ->
     res.send new restify.BadRequestError "Please submit a username"
     return next(false)
   helpUrl = process.env.YOBIKEME_HELP or "http://bit.ly/yobikeme-help"
+  errorUrl = process.env.YOBIKEME_ERROR
   success =
     success: true
   # Single-taps: Yo back the URL with the instructions
@@ -32,16 +33,18 @@ exports.yo = (req, res, next) ->
     # Yo back Help URL
     yoclient.send req.params.username, helpUrl, (err, response) ->
       if err
+        # Fire 'errors' event to log error
+        eventLogger.fireErrors req, err
         # Send error back if sending Yo has failed
         message = "Error while submitting Yo help to #{req.params.username}"
-        logger.error "#{message}: #{err.message}"
+        logger.error "#{message}: #{err.name}: #{err.message}"
         res.send new restify.BadRequestError message
         return next(false)
       else
-        # Great success!
-        logger.info "SUCCESS: Yo help sent to #{req.params.username}"
         # Fire 'instructions' event
         eventLogger.fireInstructions req, helpUrl
+        # Great success!
+        logger.info "SUCCESS: Yo help sent to #{req.params.username}"
         # Send API response back and close connection
         res.json success
         return next()
@@ -51,20 +54,34 @@ exports.yo = (req, res, next) ->
     # Retrieve nearest cycle hire station
     station.locate (err, directions) ->
       if err
+        # Fire 'errors' event to log error
+        eventLogger.fireErrors req, err
+        # Send Yo with URL to friendly error page if CityBikes lookup has failed
+        if errorUrl
+          yoclient.send req.params.username, errorUrl, (err) ->
+            # Log if Yo fails
+            if err
+              # Fire 'errors' event to log error
+              eventLogger.fireErrors req, err
+              message = "Error while submitting Yo error URL
+               to #{req.params.username}"
+              logger.error "#{message}: #{err.name}: #{err.message}"
         # Send 404 if CityBikes lookup has failed
         message = "Error while retrieving the nearest station for user
          #{req.params.username}"
-        logger.warn "#{message}: #{err.message}"
+        logger.warn "#{message}: #{err.name}: #{err.message}"
         res.send new restify.NotFoundError message
         return next(false)
       else
         # Yo back the Google Maps directions
         yoclient.send req.params.username, directions.url, (err, response) ->
           if err
+            # Fire 'errors' event to log error
+            eventLogger.fireErrors req, err
             # Send error back if sending Yo has failed
             message = "Error while submitting Yo directions
              to #{req.params.username}"
-            logger.error "#{message}: #{err.message}"
+            logger.error "#{message}: #{err.name}: #{err.message}"
             res.send new restify.BadRequestError message
             return next(false)
           else

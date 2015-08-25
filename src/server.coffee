@@ -3,6 +3,7 @@
 #
 # Newrelic should be on the top
 newrelic = require './helpers/newrelic'
+rollbar = require './helpers/rollbar'
 
 restify = require 'restify'
 chalk = require 'chalk'

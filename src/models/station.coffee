@@ -1,7 +1,6 @@
 geolib = require 'geolib'
 citybikes = require 'citybikes-js'
 redis = require '../helpers/redis'
-logger = require '../helpers/logger'
 
 class Station
   constructor: (@location) ->

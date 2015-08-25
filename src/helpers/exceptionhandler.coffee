@@ -4,12 +4,14 @@
 logger = require './logger'
 
 exceptionHandler = (req, res, route, err) ->
-  logger.error "Exception caught! Error message: #{err.message}"
+  # Log exception
+  logger.error "#{err.name}: #{err.message}"
   logger.debug err.stack
   response =
     message: "InternalServerError"
     description: "Ouch! Internal server error, please try again"
   res.json 500, response
-  throw new Error "Uncaught Exception"
+  # Throwing back the exception to force the application exit
+  throw err
 
 module.exports = exceptionHandler

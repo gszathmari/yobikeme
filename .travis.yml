@@ -10,9 +10,6 @@ after_success:
   - istanbul report lcov --dir coverage/
   - coveralls < coverage/lcov.info
   - rm -rf coverage/
-  - git config --global push.default matching
-  - git remote add deploy https://$USER:$PASSWORD@hub.jazz.net/git/gszathmari/yobikeme
-  - git push deploy -f
 env:
   - YO_API_TOKEN=secret
 services:

@@ -14,18 +14,25 @@ The latest list of supported cities is available on [CityBikes](http://citybik.e
 
 The following environmental variables should be configured
 
+### General
+
 - `YO_API_TOKEN`: Yo API secret token
-- `HOST`: _(optional)_ Bind host
-- `PORT`: _(optional)_ Bind port
-- `YOBIKEME_HELP`: _(default: bit.ly/yobikeme-help)_ Link to YOBIKEME help page
-- `WORKERS`: _(default: 1)_ Number of workers to handle Yo requests
-- `NEW_RELIC_LICENSE_KEY`: _(optional)_ NewRelic licence key
 - `REDIS_HOST`: _(default: 127.0.0.1)_ Redis server address
 - `REDIS_PORT`: _(default: 6379)_ Redis server port
 - `REDIS_PASSWORD`: _(optional)_ Redis credentials
+- `HOST`: _(optional)_ Bind host
+- `PORT`: _(optional)_ Bind port
+- `YOBIKEME_HELP`: _(default: bit.ly/yobikeme-help)_ Link to YOBIKEME help page
+- `YOBIKEME_ERROR`: _(optional)_ Link to YOBIKEME error page
+- `WORKERS`: _(default: 1)_ Number of workers to handle Yo requests
+
+### Monitoring
+
+- `NEW_RELIC_LICENSE_KEY`: _(optional)_ NewRelic licence key
 - `LOGENTRIES_TOKEN`: _(optional)_ Logentries secret token
 - `KEEN_PROJECT_ID`: _(optional)_ Keen.io project ID for event logging
 - `KEEN_WRITE_API_KEY`: _(optional)_ Keen.io write API key
+- `ROLLBAR_ACCESS_TOKEN`: _(optional)_ Rollbar server-side token for logging uncaught exceptions
 
 ## Testing
 
