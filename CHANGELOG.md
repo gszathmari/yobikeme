@@ -1,6 +1,7 @@
 ## v1.5.2 (2015-08-26)
 
   - Improve unit test coverage
+  - Minor code refactoring in controllers
 
 ## v1.5.1 (2015-08-26)
 
