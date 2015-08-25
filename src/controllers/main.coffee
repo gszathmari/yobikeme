@@ -36,7 +36,7 @@ exports.yo = (req, res, next) ->
         eventLogger.fireErrors req, err
         # Send error back if sending Yo has failed
         message = "Error while submitting Yo help to #{req.params.username}"
-        logger.error "#{message}: #{err.message}"
+        logger.error "#{message}: #{err.name}: #{err.message}"
         res.send new restify.BadRequestError message
         return next(false)
       else
@@ -58,7 +58,7 @@ exports.yo = (req, res, next) ->
         # Send 404 if CityBikes lookup has failed
         message = "Error while retrieving the nearest station for user
          #{req.params.username}"
-        logger.warn "#{message}: #{err.message}"
+        logger.warn "#{message}: #{err.name}: #{err.message}"
         res.send new restify.NotFoundError message
         return next(false)
       else
@@ -70,7 +70,7 @@ exports.yo = (req, res, next) ->
             # Send error back if sending Yo has failed
             message = "Error while submitting Yo directions
              to #{req.params.username}"
-            logger.error "#{message}: #{err.message}"
+            logger.error "#{message}: #{err.name}: #{err.message}"
             res.send new restify.BadRequestError message
             return next(false)
           else
