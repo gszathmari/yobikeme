@@ -23,6 +23,7 @@ The following environmental variables should be configured
 - `HOST`: _(optional)_ Bind host
 - `PORT`: _(optional)_ Bind port
 - `YOBIKEME_HELP`: _(default: bit.ly/yobikeme-help)_ Link to YOBIKEME help page
+- `YOBIKEME_ERROR`: _(optional)_ Link to YOBIKEME error page
 - `WORKERS`: _(default: 1)_ Number of workers to handle Yo requests
 
 ### Monitoring
