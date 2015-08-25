@@ -1,3 +1,7 @@
+## v1.5.1 (2015-08-26)
+
+  - Amending exception handling logic
+
 ## v1.5.0 (2015-08-26)
 
   - Add Rollbar support
