@@ -21,7 +21,6 @@ describe 'Helper: exceptionhandler', ->
       r = exceptionHandler req, res, null, err
     # Exception handler should produce an exception, therefore this is expected
     catch err
-      expect(err.message).to.contain('Uncaught Exception')
       expect(req.called).be.false
       expect(res.json.calledOnce).be.true
       expect(res.json.calledWith 500, jsonResponse).be.true
