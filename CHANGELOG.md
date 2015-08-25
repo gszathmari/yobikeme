@@ -1,3 +1,7 @@
+## v1.5.2 (2015-08-26)
+
+  - Improve unit test coverage
+
 ## v1.5.1 (2015-08-26)
 
   - Amending exception handling logic

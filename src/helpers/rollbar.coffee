@@ -5,5 +5,6 @@ fn = ->
       exitOnUncaughtException: true
 
     rollbar.handleUncaughtExceptions process.env.ROLLBAR_ACCESS_TOKEN, options
+    return rollbar
 
 module.exports = fn()
