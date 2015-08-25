@@ -1,6 +1,9 @@
-if process.env.ROLLBAR_ACCESS_TOKEN
-  rollbar = require 'rollbar'
-  options =
-    exitOnUncaughtException: true
+fn = ->
+  if process.env.ROLLBAR_ACCESS_TOKEN
+    rollbar = require 'rollbar'
+    options =
+      exitOnUncaughtException: true
 
-  rollbar.handleUncaughtExceptions process.env.ROLLBAR_ACCESS_TOKEN, options
+    rollbar.handleUncaughtExceptions process.env.ROLLBAR_ACCESS_TOKEN, options
+
+module.exports = fn()
