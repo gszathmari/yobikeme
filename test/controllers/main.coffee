@@ -93,6 +93,7 @@ describe 'Controller: yo', ->
 
   it 'should return 404 error', (done) ->
     @stub1.yields new Error, null
+    @stub2.callsArgWith 2, new Error
     r = main.yo @req, @res, @next
     expect(@res.send.calledOnce).be.true
     expect(@res.send.firstCall.args[0]).be.an('object')
@@ -100,7 +101,8 @@ describe 'Controller: yo', ->
     expect(@res.send.firstCall.args[0].statusCode).equal(404)
     expect(@next.calledOnce).be.true
     expect(@next.calledWith false).be.true
-    expect(@stub3.fireErrors.calledOnce).be.true
+    expect(@stub2.calledOnce).be.true
+    expect(@stub3.fireErrors.calledTwice).be.true
     done()
 
   it 'should return Google Maps URL', (done) ->

@@ -5,6 +5,7 @@
   - Some refactoring around logging
   - Improve unit test coverage
   - Add friendly error response to the end user if upstream API fails
+  - Bluemix deployment script is broken, removing for now
 
 ## v1.4.0 (2015-08-25)
 
