@@ -4,13 +4,18 @@ validator = require 'validator'
 citybikes = require 'citybikes-js'
 geolib = require 'geolib'
 
+User = require '../../src/models/user'
 Station = require '../../src/models/station'
 redis = require '../../src/helpers/redis'
 
 expect = chai.expect
 
 describe 'Model: Station', ->
-  location = "42.344827;-71.028664"
+  req =
+    params:
+      username: "unittest"
+      location: "42.344827;-71.028664"
+  user = new User req.params
   latitude = "42.344827"
   longitude = "-71.028664"
   nearestStation =
@@ -64,7 +69,7 @@ describe 'Model: Station', ->
   networks_citybikes = [citybikes1, citybikes2]
 
   beforeEach ->
-    @station = new Station location
+    @station = new Station user
     @stub1 = sinon.stub redis, "get"
     @stub2 = sinon.stub citybikes, "networks"
     @stub3 = sinon.stub citybikes, "stations"
@@ -78,9 +83,6 @@ describe 'Model: Station', ->
     expect(@station).to.respondTo('getNetworks')
     expect(@station).to.respondTo('getStations')
     expect(@station).to.respondTo('locate')
-    expect(@station.coordinates).to.be.an('object')
-    expect(@station.coordinates.latitude).to.be.equal(latitude)
-    expect(@station.coordinates.longitude).to.be.equal(longitude)
     done()
 
   it 'processNetworks should transform objects', (done) ->
@@ -98,6 +100,16 @@ describe 'Model: Station', ->
       expect(stations[item1.id].latitude).to.equal(item1.geometry.coordinates[1])
       expect(stations[item1.id].longitude).to.equal(item1.geometry.coordinates[0])
       expect(stations[item2.id]).be.undefined
+      done()
+
+  it 'processStations should handle empty station array', (done) ->
+    @station.processStations [], (err, stations) ->
+      expect(err).to.be.an.error
+      done()
+
+  it 'processStations should handle no available stations', (done) ->
+    @station.processStations [item2], (err, stations) ->
+      expect(err).to.be.an.error
       done()
 
   it 'constructResponse should return valid URL', (done) ->
@@ -193,7 +205,11 @@ describe 'Model: Station', ->
     done()
 
 describe 'Model: Station.locate', ->
-  location = "42.344827;-71.028664"
+  req =
+    params:
+      username: "unittest"
+      location: "42.344827;-71.028664"
+  user = new User req.params
   nearestNetwork =
     key: 'unittest'
     latitude: 1.1
@@ -204,7 +220,7 @@ describe 'Model: Station.locate', ->
   mapsUrl += '1.1,2.2/data=!4m2!4m1!3e2'
 
   beforeEach ->
-    @station = new Station location
+    @station = new Station user
     @stub1 = sinon.stub @station, "getNetworks"
     @stub2 = sinon.stub @station, "getStations"
     @stub3 = sinon.stub geolib, "findNearest"
