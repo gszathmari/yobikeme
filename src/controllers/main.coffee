@@ -32,16 +32,18 @@ exports.yo = (req, res, next) ->
     # Yo back Help URL
     yoclient.send req.params.username, helpUrl, (err, response) ->
       if err
+        # Fire 'errors' event to log error
+        eventLogger.fireErrors req, err
         # Send error back if sending Yo has failed
         message = "Error while submitting Yo help to #{req.params.username}"
         logger.error "#{message}: #{err.message}"
         res.send new restify.BadRequestError message
         return next(false)
       else
-        # Great success!
-        logger.info "SUCCESS: Yo help sent to #{req.params.username}"
         # Fire 'instructions' event
         eventLogger.fireInstructions req, helpUrl
+        # Great success!
+        logger.info "SUCCESS: Yo help sent to #{req.params.username}"
         # Send API response back and close connection
         res.json success
         return next()
@@ -51,6 +53,8 @@ exports.yo = (req, res, next) ->
     # Retrieve nearest cycle hire station
     station.locate (err, directions) ->
       if err
+        # Fire 'errors' event to log error
+        eventLogger.fireErrors req, err
         # Send 404 if CityBikes lookup has failed
         message = "Error while retrieving the nearest station for user
          #{req.params.username}"
@@ -61,6 +65,8 @@ exports.yo = (req, res, next) ->
         # Yo back the Google Maps directions
         yoclient.send req.params.username, directions.url, (err, response) ->
           if err
+            # Fire 'errors' event to log error
+            eventLogger.fireErrors req, err
             # Send error back if sending Yo has failed
             message = "Error while submitting Yo directions
              to #{req.params.username}"

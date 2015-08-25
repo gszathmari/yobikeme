@@ -4,6 +4,7 @@ sinon = require 'sinon'
 Station = require '../../src/models/station'
 main = require '../../src/controllers/main'
 yoclient = require '../../src/helpers/yoclient'
+eventLogger = require '../../src/helpers/eventlogger'
 
 expect = chai.expect
 
@@ -63,9 +64,11 @@ describe 'Controller: yo', ->
       params:
         username: "unittest"
         location: "42.344827;-71.028664"
+        ip_address: "127.0.0.1"
     @req2 =
       params:
         username: "unittest"
+        ip_address: "127.0.0.1"
     @req3 =
       params:
         username: null
@@ -75,6 +78,10 @@ describe 'Controller: yo', ->
     @next = sinon.spy()
     @stub1 = sinon.stub Station.prototype, "locate"
     @stub2 = sinon.stub yoclient, "send"
+    @stub3 =
+      fireErrors: sinon.stub eventLogger, "fireErrors"
+      fireDirections: sinon.stub eventLogger, "fireDirections"
+      fireInstructions: sinon.stub eventLogger, "fireInstructions"
 
   it 'should fail if username was not suppled', (done) ->
     r = main.yo @req3, @res, @next
@@ -93,6 +100,7 @@ describe 'Controller: yo', ->
     expect(@res.send.firstCall.args[0].statusCode).equal(404)
     expect(@next.calledOnce).be.true
     expect(@next.calledWith false).be.true
+    expect(@stub3.fireErrors.calledOnce).be.true
     done()
 
   it 'should return Google Maps URL', (done) ->
@@ -102,6 +110,7 @@ describe 'Controller: yo', ->
     expect(@res.json.calledOnce).be.true
     expect(@res.json.firstCall.args[0]).have.property('success')
     expect(@next.calledOnce).be.true
+    expect(@stub3.fireDirections.calledOnce).be.true
     done()
 
   it 'should fail if Yo directions cannot be sent', (done) ->
@@ -112,6 +121,7 @@ describe 'Controller: yo', ->
     expect(@res.send.firstCall.args[0]).have.property('statusCode')
     expect(@res.send.firstCall.args[0].statusCode).equal(400)
     expect(@next.calledOnce).be.true
+    expect(@stub3.fireErrors.calledOnce).be.true
     done()
 
   it 'should return Helper URL', (done) ->
@@ -121,6 +131,7 @@ describe 'Controller: yo', ->
     expect(@res.json.calledOnce).be.true
     expect(@res.json.firstCall.args[0]).have.property('success')
     expect(@next.calledOnce).be.true
+    expect(@stub3.fireInstructions.calledOnce).be.true
     done()
 
   it 'should fail if Yo helper cannot be sent', (done) ->
@@ -131,6 +142,7 @@ describe 'Controller: yo', ->
     expect(@res.send.firstCall.args[0]).have.property('statusCode')
     expect(@res.send.firstCall.args[0].statusCode).equal(400)
     expect(@next.calledOnce).be.true
+    expect(@stub3.fireErrors.calledOnce).be.true
     done()
 
   afterEach ->
@@ -139,3 +151,6 @@ describe 'Controller: yo', ->
     @next.reset()
     @stub1.restore()
     @stub2.restore()
+    @stub3.fireErrors.restore()
+    @stub3.fireDirections.restore()
+    @stub3.fireInstructions.restore()
