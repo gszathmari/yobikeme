@@ -21,11 +21,11 @@ class EventLogger
           logger.error m
 
   # Construct 'directions' event
-  fireDirections: (req, directions) ->
+  fireDirections: (user, directions) ->
     directionsEvent =
       user:
-        id: req.params.username
-        ip_address: req.params.user_ip or "127.0.0.1"
+        id: user.getId()
+        ip_address: user.getIP()
       destination:
         coordinates: [directions.destination[1], directions.destination[0]]
       yo_url: directions.url
@@ -49,11 +49,11 @@ class EventLogger
     @sendEvent "directions", directionsEvent
 
   # Construct 'instructions' event
-  fireInstructions: (req, url) ->
+  fireInstructions: (user, url) ->
     instructionsEvent =
       user:
-        id: req.params.username
-        ip_address: req.params.user_ip or "127.0.0.1"
+        id: user.getId()
+        ip_address: user.getIP()
       yo_url: url
       keen:
         addons: [
@@ -72,11 +72,11 @@ class EventLogger
         ]
     @sendEvent "instructions", instructionsEvent
 
-  fireErrors: (req, error) ->
+  fireErrors: (user, error) ->
     errorsEvent =
       user:
-        id: req.params.username or "unknown"
-        ip_address: req.params.user_ip or "127.0.0.1"
+        id: user.getId()
+        ip_address: user.getIP()
       error:
         name: error.name
         message: error.message
