@@ -1,3 +1,10 @@
+## v1.4.1 (2015-08-26)
+
+  - Add Rollbar support
+  - Log errors with Keen
+  - Some refactoring around logging
+  - Improve unit test coverage
+
 ## v1.4.0 (2015-08-25)
 
   - Add optional Keen.io support for event logging
