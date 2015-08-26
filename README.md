@@ -2,7 +2,7 @@
 
 Double-tap the [YOBIKEME](http://justyo.co/YOBIKEME) user and it will send you the walking directions to the nearest cycle hire station
 
-[![Build Status](https://travis-ci.org/gszathmari/yobikeme.svg)](https://travis-ci.org/gszathmari/yobikeme)
+[![Build Status](https://img.shields.io/circleci/project/gszathmari/yobikeme.svg)](https://circleci.com/gh/gszathmari/yobikeme)
 [![Coverage Status](https://coveralls.io/repos/gszathmari/yobikeme/badge.svg?branch=master&service=github)](https://coveralls.io/github/gszathmari/yobikeme?branch=master)
 [![Dependency Status](https://david-dm.org/gszathmari/yobikeme.svg)](https://david-dm.org/gszathmari/yobikeme)
 

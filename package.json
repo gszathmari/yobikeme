@@ -42,8 +42,7 @@
     "grunt-mocha-test": "^0.12.7",
     "mocha": "^2.2.5",
     "precommit-hook": "^3.0.0",
-    "sinon": "^1.15.4",
-    "validator": "^4.0.3"
+    "sinon": "^1.15.4"
   },
   "main": "lib/server.js",
   "scripts": {

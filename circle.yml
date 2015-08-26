@@ -1,0 +1,45 @@
+general:
+  branches:
+    ignore:
+      - gh-pages
+
+machine:
+  environment:
+    YO_API_TOKEN: secret
+    ROLLBAR_ACCESS_TOKEN: secret
+    KEEN_PROJECT_ID: secret
+    KEEN_WRITE_API_KEY: secret
+  node:
+    version: 0.12
+  services:
+    - redis
+
+dependencies:
+  pre:
+    - curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
+    - sudo dpkg -i cf-cli_amd64.deb
+    - cf -v
+    - npm i -g coffee-script coffeelint mocha istanbul coveralls grunt-cli
+    - npm i mocha-junit-reporter
+
+test:
+  post:
+    - mocha --recursive --compilers coffee:coffee-script/register --require coffee-coverage/register-istanbul --reporter mocha-junit-reporter ./test || true
+    - ls -l ./coverage/coverage-coffee.json
+    - istanbul report lcov --dir ./coverage/ && coveralls -v < ./coverage/lcov.info
+    - cp -Rv ./coverage/lcov-report $CIRCLE_ARTIFACTS
+    - cp -v ./test-results.xml $CIRCLE_TEST_REPORTS
+    - cf api https://api.ng.bluemix.net
+    - cf auth $BLUEMIX_USER $BLUEMIX_PASSWORD
+    - cf target -o $BLUEMIX_USER -s YoBikeMe
+    - cf a
+
+deployment:
+  production:
+    branch: master
+    commands:
+      - cf push yobikeme-production
+  staging:
+    branch: testing
+    commands:
+      - cf push yobikeme-testing
