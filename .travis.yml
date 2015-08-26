@@ -1,20 +1,35 @@
 language: node_js
+
 node_js:
   - '0.10'
   - '0.12'
   - iojs
+
 before_install:
   - npm install -g coffee-script coffeelint mocha mocha-lcov-reporter istanbul coveralls grunt-cli
+
 after_success:
   - mocha --recursive --compilers coffee:coffee-script/register --require coffee-coverage/register-istanbul --reporter mocha-lcov-reporter ./test
   - istanbul report lcov --dir coverage/
-  - coveralls < coverage/lcov.info
+  - coveralls -v < coverage/lcov.info
   - rm -rf coverage/
+
 env:
-  - YO_API_TOKEN=secret
+  - YO_API_TOKEN=secret ROLLBAR_ACCESS_TOKEN=secret KEEN_PROJECT_ID=secret KEEN_WRITE_API_KEY=secret
+
 services:
   - redis-server
+
 branches:
-  only:
-    - master
-    - testing
+  except:
+    - gh-pages
+
+deploy:
+  - provider: script
+    script: test $TRAVIS_NODE_VERSION != '0.12' || bash ./scripts/deploy.sh yobikeme-production
+    on:
+      branch: master
+  - provider: script
+    script: test $TRAVIS_NODE_VERSION != '0.12' || bash ./scripts/deploy.sh yobikeme-testing
+    on:
+      branch: testing
