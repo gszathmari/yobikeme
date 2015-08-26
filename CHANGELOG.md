@@ -1,3 +1,7 @@
+## v1.5.4 (2015-08-27)
+
+  - Fixing automated Bluemix deployments
+
 ## v1.5.3 (2015-08-27)
 
   - Input validate incoming parameters
