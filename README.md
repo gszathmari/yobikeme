@@ -3,8 +3,10 @@
 Double-tap the [YOBIKEME](http://justyo.co/YOBIKEME) user and it will send you the walking directions to the nearest cycle hire station
 
 [![Build Status](https://travis-ci.org/gszathmari/yobikeme.svg)](https://travis-ci.org/gszathmari/yobikeme)
+[![Docker](https://img.shields.io/circleci/project/gszathmari/yobikeme.svg)](https://circleci.com/gh/gszathmari/yobikeme/)
 [![Coverage Status](https://coveralls.io/repos/gszathmari/yobikeme/badge.svg?branch=master&service=github)](https://coveralls.io/github/gszathmari/yobikeme?branch=master)
 [![Dependency Status](https://david-dm.org/gszathmari/yobikeme.svg)](https://david-dm.org/gszathmari/yobikeme)
+[![Docker Image Layers](https://badge.imagelayers.io/gszathmari/yobikeme:latest.svg)](https://imagelayers.io/?images=gszathmari/yobikeme:latest)
 
 ## Supported Cities
 
@@ -17,14 +19,13 @@ The following environmental variables should be configured
 ### General
 
 - `YO_API_TOKEN`: Yo API secret token
-- `REDIS_HOST`: _(default: 127.0.0.1)_ Redis server address
-- `REDIS_PORT`: _(default: 6379)_ Redis server port
-- `REDIS_PASSWORD`: _(optional)_ Redis credentials
+- `REDIS_DB_HOST`: _(default: 127.0.0.1)_ Redis server address
+- `REDIS_DB_PORT`: _(default: 6379)_ Redis server port
+- `REDIS_DB_PASSWORD`: _(optional)_ Redis credentials
 - `HOST`: _(optional)_ Bind host
 - `PORT`: _(optional)_ Bind port
 - `YOBIKEME_HELP`: _(default: bit.ly/yobikeme-help)_ Link to YOBIKEME help page
-- `YOBIKEME_ERROR`: _(optional)_ Link to YOBIKEME error page
-- `WORKERS`: _(default: 1)_ Number of workers to handle Yo requests
+- `YOBIKEME_ERROR`: _(default: bit.ly/yobikeme-help)_ Link to YOBIKEME error page
 
 ### Monitoring
 
