@@ -1,0 +1,26 @@
+general:
+  branches:
+    ignore:
+      - gh-pages
+
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker info
+    - docker build -t gszathmari/yobikeme .
+
+test:
+  override:
+    - docker pull redis && docker run -d --name redis -p 6666:6666 redis
+    - docker run -d -p 8080:8080 --link redis:redis -e "YO_API_TOKEN=secret" gszathmari/yobikeme
+    - sleep 10 && curl --retry 10 --retry-delay 5 -v http://localhost:8080
+
+deployment:
+  hub:
+    branch: master
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker push gszathmari/yobikeme:latest
