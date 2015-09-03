@@ -1,3 +1,9 @@
+## v1.5.6 (2015-09-03)
+
+  - Add AWS ECS task definition
+  - Add Docker compose configuration file
+  - Fix Dockerfile to serve /version endpoint again
+
 ## v1.5.5 (2015-09-02)
 
   - Add Docker support
