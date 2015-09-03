@@ -1,6 +1,6 @@
 {
   "name": "yobikeme",
-  "version": "1.5.5",
+  "version": "1.5.6",
   "description": "Double-tap this Yo user and it will send you the walking directions to the nearest cycle hire station",
   "engines": {
     "node": ">=0.12"

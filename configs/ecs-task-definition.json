@@ -1,0 +1,50 @@
+{
+  "taskDefinitionArn": "arn:aws:ecs:us-east-1:000000000000:task-definition/yobikeme:1",
+  "status": "ACTIVE",
+  "revision": 1,
+  "containerDefinitions": [
+    {
+      "volumesFrom": [],
+      "portMappings": [
+        {
+          "hostPort": 8080,
+          "containerPort": 8080,
+          "protocol": "tcp"
+        }
+      ],
+      "command": [],
+      "environment": [
+        {
+          "name": "YO_API_TOKEN",
+          "value": "replaceme"
+        }
+      ],
+      "essential": true,
+      "entryPoint": [],
+      "links": [
+        "redis"
+      ],
+      "mountPoints": [],
+      "memory": 256,
+      "name": "node",
+      "cpu": 256,
+      "image": "gszathmari/yobikeme:latest"
+    },
+    {
+      "volumesFrom": [],
+      "portMappings": [],
+      "command": [],
+      "environment": [],
+      "essential": true,
+      "entryPoint": [],
+      "links": [],
+      "mountPoints": [],
+      "memory": 128,
+      "name": "redis",
+      "cpu": 256,
+      "image": "redis"
+    }
+  ],
+  "volumes": [],
+  "family": "yobikeme-api"
+}

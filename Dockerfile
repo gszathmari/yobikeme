@@ -14,6 +14,6 @@ WORKDIR /app
 COPY . /app
 RUN coffee --bare --compile --output /app/lib/ /app/src/
 
-CMD ["forever", "/app/lib/server.js"]
+CMD ["forever", "./lib/server.js"]
 
 EXPOSE 8080
