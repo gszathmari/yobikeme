@@ -1,6 +1,11 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
 body {
   padding-top: 70px;
   padding-bottom: 30px;
+  margin-bottom: 60px;
   background: #9b59b6;
 }
 .jumbotron {
@@ -26,4 +31,23 @@ p {
 }
 .img-responsive {
     margin: 0 auto;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #34495e;
+}
+.container .text-muted {
+  margin: 20px 0;
+  color: #bdc3c7;
+}
+.footer > .container {
+  padding-right: 15px;
+  padding-left: 15px;
+  font-family: ‘Metrophobic’, Arial, serif;
+  font-weight: 400;
+  font-size: small;
 }
