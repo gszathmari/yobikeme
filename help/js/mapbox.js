@@ -35,7 +35,7 @@ $( document ).ready(function() {
             "title": network.location.city,
             "description": network.name,
             "marker-color": "#3f9ddd",
-            "marker-size": "small",
+            "marker-size": "large",
             "marker-symbol": "bicycle"
           }
         });
