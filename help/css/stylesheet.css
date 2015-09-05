@@ -22,7 +22,7 @@ img.flip-vertical {
     -ms-filter: flipv; /*IE*/
     filter: flipv;
 }
-h1 {
+h1, h3 {
   text-align: center;
   padding-bottom: 12px;
 }
