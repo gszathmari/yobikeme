@@ -22,7 +22,7 @@ class Station
   processStations: (stations, callback) ->
     results = new Object
     counter = 0
-    error = new Error "error while retrieving stations"
+    error = new Error "error while retrieving stations from CityBikes API"
     # Check if we have any stations at all
     if stations.length is 0
       callback error, null

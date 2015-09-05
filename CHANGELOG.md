@@ -1,3 +1,7 @@
+## v1.5.7 (2015-09-05)
+
+  - Log user coordinates in case of error for debugging purposes
+
 ## v1.5.6 (2015-09-03)
 
   - Add AWS ECS task definition
