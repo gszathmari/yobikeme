@@ -44,7 +44,8 @@ exports.yo = (req, res, next) ->
             # Fire 'errors' event to log error
             eventLogger.fireErrors user, err
             # Log error if sending Yo has failed
-            message = "Error while submitting Yo help to #{user.getId()}"
+            message = "Error while submitting Yo help
+              to #{user.getId()} (Coordinates: #{user.getLocation()})"
             logger.error "#{message}: #{err.name}: #{err.message}"
             # Send error message back to the API client
             res.send new restify.BadRequestError message
@@ -77,7 +78,7 @@ exports.yo = (req, res, next) ->
                 eventLogger.fireErrors user, err
                 # Construct error message and log it
                 message = "Error while submitting Yo error URL
-                 to #{user.getId()}"
+                 to #{user.getId()} (Coordinates: #{user.getLocation()})"
                 logger.error "#{message}: #{err.name}: #{err.message}"
             # Send 404 if CityBikes lookup has failed
             message = "Error while retrieving the nearest station for user
@@ -96,7 +97,7 @@ exports.yo = (req, res, next) ->
                 eventLogger.fireErrors user, err
                 # Construct error message and log it
                 message = "Error while submitting Yo directions
-                 to #{user.getId()}"
+                 to #{user.getId()} (Coordinates: #{user.getLocation()})"
                 logger.error "#{message}: #{err.name}: #{err.message}"
                 # Send error message back to the API client
                 res.send new restify.BadRequestError message

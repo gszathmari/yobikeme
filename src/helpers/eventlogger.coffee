@@ -26,6 +26,7 @@ class EventLogger
       user:
         id: user.getId()
         ip_address: user.getIP()
+        coordinates: user.getLocation()
       destination:
         coordinates: [directions.destination[1], directions.destination[0]]
       yo_url: directions.url
@@ -77,6 +78,7 @@ class EventLogger
       user:
         id: user.getId()
         ip_address: user.getIP()
+        coordinates: user.getLocation()
       error:
         name: error.name
         message: error.message
