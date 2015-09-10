@@ -7,6 +7,7 @@ rollbar = require './helpers/rollbar'
 
 restify = require 'restify'
 chalk = require 'chalk'
+morgan = require 'morgan'
 
 exceptionHandler = require './helpers/exceptionhandler'
 logger = require './helpers/logger'
@@ -24,6 +25,8 @@ app.pre restify.pre.userAgentConnection()
 # Restify workaround for handling trailing slashes
 app.pre restify.pre.sanitizePath()
 app.use restify.queryParser()
+# Dump HTTP logs to console
+app.use morgan 'tiny'
 
 # Prevents leaking internal errors through the API
 app.on 'uncaughtException', exceptionHandler

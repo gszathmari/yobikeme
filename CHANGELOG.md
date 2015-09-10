@@ -1,3 +1,7 @@
+## v1.5.8 (2015-09-10)
+
+  - Adding morgan to log HTTP requests onto console
+
 ## v1.5.7 (2015-09-05)
 
   - Log user coordinates in case of error for debugging purposes
