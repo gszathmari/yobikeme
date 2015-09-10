@@ -1,6 +1,6 @@
 {
   "name": "yobikeme",
-  "version": "1.5.7",
+  "version": "1.5.8",
   "description": "Double-tap this Yo user and it will send you the walking directions to the nearest cycle hire station",
   "engines": {
     "node": ">=0.12"
@@ -16,6 +16,7 @@
     "geolib": "^2.0.18",
     "git-rev": "^0.2.1",
     "keen-js": "^3.2.7",
+    "morgan": "^1.6.1",
     "newrelic": "^1.21.2",
     "redis": "^0.12.1",
     "restify": "^4.0.0",
