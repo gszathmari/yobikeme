@@ -1,6 +1,7 @@
 ## v1.5.9 (2015-09-11)
 
   - Faster response time if the nearest cycle hire network is too far
+  - Use 'forever' to run node in production
 
 ## v1.5.8 (2015-09-10)
 
