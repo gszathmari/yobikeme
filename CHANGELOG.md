@@ -1,3 +1,7 @@
+## v1.5.9 (2015-09-11)
+
+  - Faster response time if the nearest cycle hire network is too far
+
 ## v1.5.8 (2015-09-10)
 
   - Adding morgan to log HTTP requests onto console

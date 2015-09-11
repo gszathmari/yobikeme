@@ -93,7 +93,13 @@ class Station
               return true
 
   # Retrieve and cache list of cycle hire stations from CityBikes
-  getStations: (networkName, callback) ->
+  getStations: (nearestNetwork, callback) ->
+    networkName = nearestNetwork.key
+    # Return error if closest network is further than 25 km
+    if nearestNetwork.distance > 25000
+      err = new Error "Nearest network is too far"
+      callback err, null
+      return false
     # Retrieve list of stations from cache
     redis.get networkName, (err, stations) =>
       if stations
@@ -132,7 +138,7 @@ class Station
           err = new Error "geolib error while finding networks"
           callback err, null
           return false
-        @getStations nearestNetwork.key, (err, stations) =>
+        @getStations nearestNetwork, (err, stations) =>
           if err
             # Return error if getting cycle hire stations has failed
             callback err, null
