@@ -33,7 +33,20 @@ describe 'Model: Station', ->
       coordinates: ["12.343109", "20.023661"]
     properties:
       free_bikes: 0
+  # Array of cycle hire stations
   items = [item1, item2]
+  # Valid network
+  nearestNetwork =
+    key: "unittest"
+    latitude: 46.127196
+    longitude: 8.499169
+    distance: 10000
+  # Network that is too far
+  nearestNetwork2 =
+    key: "unittest2"
+    latitude: -4.3221
+    longitude: 2.32912
+    distance: 25001
   error = new Error "Unit test error, please ignore"
   networks_redis =
     network1:
@@ -166,7 +179,7 @@ describe 'Model: Station', ->
   it 'getStations should return cycle hire stations from cache', (done) ->
     callback = sinon.spy()
     @stub1.callsArgWith 1, null, JSON.stringify items
-    result = @station.getStations items[0].id, callback
+    result = @station.getStations nearestNetwork, callback
     expect(callback.calledOnce).be.true
     expect(callback.firstCall.args[0]).be.null
     expect(callback.firstCall.args[1]).deep.equal(items)
@@ -176,7 +189,7 @@ describe 'Model: Station', ->
     callback = sinon.spy()
     @stub1.callsArgWith 1, null, null
     @stub3.callsArgWith 1, null, items
-    result = @station.getStations items[0].id, callback
+    result = @station.getStations nearestNetwork, callback
     expect(callback.calledOnce).be.true
     expect(callback.firstCall.args[0]).be.null
     expect(callback.firstCall.args[1][item1.id].longitude).
@@ -186,11 +199,20 @@ describe 'Model: Station', ->
     expect(callback.firstCall.args[1][item2.id]).be.undefined
     done()
 
+  it 'getStations should return error if network is too far', (done) ->
+    callback = sinon.spy()
+    @stub1.callsArgWith 1, null, null
+    @stub3.callsArgWith 1, null, items
+    result = @station.getStations nearestNetwork2, callback
+    expect(callback.calledOnce).be.true
+    expect(callback.firstCall.args[0]).be.error
+    done()
+
   it 'getStations should return error if upstream API fails', (done) ->
     callback = sinon.spy()
     @stub1.callsArgWith 1, null, null
     @stub3.callsArgWith 1, new Error, null
-    result = @station.getStations items[0].id, callback
+    result = @station.getStations nearestNetwork, callback
     expect(callback.calledOnce).be.true
     expect(callback.firstCall.args[0]).be.error
     done()
