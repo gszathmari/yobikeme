@@ -80,6 +80,10 @@ describe 'Model: Station', ->
       free_bikes: 22
     id: 'unit-test2'
   networks_citybikes = [citybikes1, citybikes2]
+  networks =
+    'nextbike-modling': { latitude: 48.1047, longitude: 16.3202 },
+    'nextbike-frankfurt': { latitude: 50.1072, longitude: 8.66375 },
+    'citi-bike-nyc': { latitude: 0, longitude: 0 }
 
   beforeEach ->
     @station = new Station user
@@ -93,6 +97,7 @@ describe 'Model: Station', ->
     expect(@station).to.respondTo('processNetworks')
     expect(@station).to.respondTo('processStations')
     expect(@station).to.respondTo('constructResponse')
+    expect(@station).to.respondTo('findNearestNetwork')
     expect(@station).to.respondTo('getNetworks')
     expect(@station).to.respondTo('getStations')
     expect(@station).to.respondTo('locate')
@@ -138,6 +143,28 @@ describe 'Model: Station', ->
     expect(directions.destination).be.an('array').with.length(2)
     expect(directions.destination[0]).be.a('number')
     expect(directions.destination[1]).be.a('number')
+    done()
+
+  it 'findNearestNetwork should return geofenced locations', (done) ->
+    req_manhattan =
+      params:
+        username: "unittest"
+        location: "40.7868337;-73.9785628"
+    user_manhattan = new User req_manhattan.params
+    station_manhattan = new Station user_manhattan
+    result = station_manhattan.findNearestNetwork networks
+    expect(result).have.property('key')
+    expect(result.key).be.equal('citi-bike-nyc')
+    expect(result).have.property('latitude')
+    expect(result).have.property('longitude')
+    done()
+
+  it 'findNearestNetwork should return nearest location', (done) ->
+    result = @station.findNearestNetwork networks
+    expect(result).have.property('key')
+    expect(result.key).be.equal('nextbike-frankfurt')
+    expect(result).have.property('latitude')
+    expect(result).have.property('longitude')
     done()
 
   it 'getNetworks should return cycle hire networks from cache', (done) ->
@@ -246,6 +273,7 @@ describe 'Model: Station.locate', ->
     @stub1 = sinon.stub @station, "getNetworks"
     @stub2 = sinon.stub @station, "getStations"
     @stub3 = sinon.stub geolib, "findNearest"
+    @stub4 = sinon.stub @station, "findNearestNetwork"
     @callback = sinon.spy()
 
   it 'should return error if networks cannot be retrieved', (done) ->
@@ -257,7 +285,7 @@ describe 'Model: Station.locate', ->
 
   it 'should return error if geolib fails finding nearestNetwork', (done) ->
     @stub1.yields null, null
-    @stub3.throws()
+    @stub4.throws()
     result = @station.locate @callback
     expect(@callback.calledOnce).be.true
     expect(@callback.firstCall.args[0]).be.error
@@ -265,7 +293,7 @@ describe 'Model: Station.locate', ->
 
   it 'should return error if stations cannot be retrieved', (done) ->
     @stub1.yields null, null
-    @stub3.returns nearestNetwork
+    @stub4.returns nearestNetwork
     @stub2.callsArgWith 1, new Error, null
     result = @station.locate @callback
     expect(@callback.calledOnce).be.true
@@ -274,8 +302,9 @@ describe 'Model: Station.locate', ->
 
   it 'should return error if stations Object is empty', (done) ->
     @stub1.yields null, null
-    @stub2.callsArgWith 1, null, {}
     @stub3.returns nearestNetwork
+    @stub4.returns nearestNetwork
+    @stub2.callsArgWith 1, null, {}
     result = @station.locate @callback
     expect(@callback.calledOnce).be.true
     expect(@callback.firstCall.args[0]).be.error
@@ -305,3 +334,4 @@ describe 'Model: Station.locate', ->
     @stub1.restore()
     @stub2.restore()
     @stub3.restore()
+    @stub4.restore()

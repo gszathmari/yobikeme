@@ -1,3 +1,8 @@
+## 1.5.10 (2015-09-22)
+
+  - Add geofencing support
+  - Force Citi bikes instead of Hudson Bike Shares in the Manhattan area
+
 ## v1.5.9 (2015-09-11)
 
   - Faster response time if the nearest cycle hire network is too far
