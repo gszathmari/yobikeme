@@ -95,16 +95,18 @@ class Station
               return true
 
   findNearestNetwork: (networks) ->
+    # Check fenced areas from database file
     for area in @geofenceDB
+      # If area is geofenced construct response and return the forced network
       if geolib.isPointInside @user.getLocation(), area.points
         fencedNetwork =
           "#{area.name}":
             latitude: networks[area.name].latitude
             longitude: networks[area.name].longitude
-        result = geolib.findNearest @user.getLocation(), fencedNetwork
-      else
-        result = geolib.findNearest @user.getLocation(), networks
-      return result
+        return geolib.findNearest @user.getLocation(), fencedNetwork
+    # Return closest network if area is not fenced
+    return geolib.findNearest @user.getLocation(), networks
+
 
   # Retrieve and cache list of cycle hire stations from CityBikes
   getStations: (nearestNetwork, callback) ->
