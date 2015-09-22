@@ -1,9 +1,11 @@
 geolib = require 'geolib'
 citybikes = require 'citybikes-js'
 redis = require '../helpers/redis'
+geofencedb = require '../helpers/geofencedb'
 
 class Station
   constructor: (@user) ->
+    @geofenceDB = geofencedb
 
   # Transform CityBikes networks into geolib object
   processNetworks: (networks, callback) ->
@@ -92,6 +94,18 @@ class Station
                   redis.expire networksName, 60 * 60 unless err
               return true
 
+  findNearestNetwork: (networks) ->
+    for area in @geofenceDB
+      if geolib.isPointInside @user.getLocation(), area.points
+        fencedNetwork =
+          "#{area.name}":
+            latitude: networks[area.name].latitude
+            longitude: networks[area.name].longitude
+        result = geolib.findNearest @user.getLocation(), fencedNetwork
+      else
+        result = geolib.findNearest @user.getLocation(), networks
+      return result
+
   # Retrieve and cache list of cycle hire stations from CityBikes
   getStations: (nearestNetwork, callback) ->
     networkName = nearestNetwork.key
@@ -132,10 +146,10 @@ class Station
       else
         try
           # Find the nearest cycle hire service
-          nearestNetwork = geolib.findNearest @user.getLocation(), networks
+          nearestNetwork = @findNearestNetwork(networks)
         catch
           # Return error if geolib throws exception
-          err = new Error "geolib error while finding networks"
+          err = new Error "error while finding networks"
           callback err, null
           return false
         @getStations nearestNetwork, (err, stations) =>
