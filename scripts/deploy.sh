@@ -14,4 +14,4 @@ ls -l
 ./cf auth $BLUEMIX_USER $BLUEMIX_PASSWORD
 ./cf target -o $BLUEMIX_USER -s YoBikeMe
 ./cf a
-./cf push $1
+./cf push $1 -s cflinuxfs2

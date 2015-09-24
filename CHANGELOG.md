@@ -1,3 +1,7 @@
+## 1.5.11
+
+  - Add 'cflinuxfs2' flag for upcoming BlueMix changes
+
 ## 1.5.10 (2015-09-22)
 
   - Add geofencing support
