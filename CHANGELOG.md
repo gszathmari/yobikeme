@@ -1,3 +1,8 @@
+## 1.5.12
+
+  - Amending geofencing coordinates of Manhattan
+  - Store geofence data in YML file
+
 ## 1.5.11
 
   - Add 'cflinuxfs2' flag for upcoming BlueMix changes

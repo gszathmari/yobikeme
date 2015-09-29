@@ -1,0 +1,25 @@
+---
+  manhattan:
+    name: "citi-bike-nyc"
+    points:
+      -
+        latitude: 40.699324
+        longitude: -74.022838
+      -
+        latitude: 40.759825
+        longitude: -74.012049
+      -
+        latitude: 40.850148
+        longitude: -73.950768
+      -
+        latitude: 40.926646
+        longitude: -73.914878
+      -
+        latitude: 40.916805
+        longitude: -73.852373
+      -
+        latitude: 40.840844
+        longitude: -73.891859
+      -
+        latitude: 40.690326
+        longitude: -73.976445
